@@ -318,7 +318,6 @@ For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 ### Community resources
 
 - [Cursor Forum - Agent Issues][forum-issues]
-- [Context Loss Solutions][context-loss]
 
 <!-- Link definitions -->
 [cursor-docs]: https://docs.cursor.com
@@ -326,5 +325,4 @@ For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 [cursor-security]: https://docs.cursor.com/account/agent-security
 [cursor-forum]: https://forum.cursor.com
 [forum-issues]: https://forum.cursor.com/c/bug-reports
-[context-loss]: https://www.augmentcode.com/guides/5-ai-tools-to-end-cursor-context-loss
 
