@@ -391,12 +391,10 @@ Use this checklist before working on sensitive projects:
 
 - [Cursor Agent Security][cursor-security]
 - [Cursor Rules][cursor-rules]
-- [Context Configuration][cursor-context]
 
 ### Vulnerability resources
 
-- [Common Cursor IDE Vulnerabilities][mobb-vulns]
-- [OWASP AI Security Guidelines][owasp-ai]
+- [OWASP AI Exchange][owasp-ai]
 
 ### Reporting security issues
 
@@ -407,8 +405,6 @@ If you discover a security vulnerability in Cursor:
 <!-- Link definitions -->
 [cursor-security]: https://docs.cursor.com/account/agent-security
 [cursor-rules]: https://docs.cursor.com/context/rules
-[cursor-context]: https://docs.cursor.com/context
-[mobb-vulns]: https://www.mobb.ai/blog/cursor-ide-common-vulnerabilities
-[owasp-ai]: https://owasp.org/www-project-ai-security-and-privacy-guide/
+[owasp-ai]: https://owaspai.org
 [cursor-advisories]: https://github.com/getcursor/cursor/security/advisories
 
