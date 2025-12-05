@@ -315,14 +315,9 @@ For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 - [Agent Security][cursor-security]
 - [Cursor Forum][cursor-forum]
 
-### Community resources
-
-- [Cursor Forum - Agent Issues][forum-issues]
-
 <!-- Link definitions -->
 [cursor-docs]: https://docs.cursor.com
 [cursor-rules]: https://docs.cursor.com/context/rules
 [cursor-security]: https://docs.cursor.com/account/agent-security
 [cursor-forum]: https://forum.cursor.com
-[forum-issues]: https://forum.cursor.com/c/bug-reports
 
