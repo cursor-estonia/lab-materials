@@ -169,10 +169,19 @@ Create a `hooks.json` file in `~/.cursor/` (global) or `<project>/.cursor/` (pro
 ```
 
 > [!NOTE]
-> Your hook scripts' exit codes matter:
-> - `0`: Success, the agent proceeds.
-> - `2`: Block the action.
-> - Other: The hook failed, but the action proceeds (fail-open).
+> Your hook scripts communicate via **exit codes** and **JSON output**:
+>
+> | Exit Code | Meaning |
+> | --------- | ------- |
+> | `0` | Hook succeeded, action proceeds. |
+> | `2` | Block the action. |
+> | Other | Hook failed, action proceeds anyway (fail-open). |
+>
+> **Two ways to block an action:**
+> - Exit with code `2`, or
+> - Output `{"permission": "deny"}` with exit `0`
+>
+> Both achieve the same result. Use whichever fits your script.
 
 ### Exercise 3: Build an audit hook
 
