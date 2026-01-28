@@ -6,6 +6,7 @@
 | [2. Deployment guide](2-deployment-guide.md)                         | Deploy to Vercel, manage environment variables, and compare hosting       |
 | [3. Understanding agent mistakes](3-understanding-agent-mistakes.md) | Context management, infinite loops, and workflow best practices           |
 | [4. Agent security guide](4-agent-security-guide.md)                 | Security vulnerabilities, prompt injection, and hardening practices       |
+| [5. Subagents and hooks](5-subagents-and-hooks.md)                   | Custom subagents, hooks, and scaling patterns for advanced workflows      |
 
 ## Questions or feedback?
 
