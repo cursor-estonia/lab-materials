@@ -2,19 +2,23 @@
 
 ## Table of Contents
 
-- [0. Overview](#0-overview)
-- [1. Context management issues](#1-context-management-issues)
-- [2. File synchronization problems](#2-file-synchronization-problems)
-- [3. Code quality issues](#3-code-quality-issues)
-- [4. Workflow best practices](#4-workflow-best-practices)
-- [5. Troubleshooting](#5-troubleshooting)
-- [6. Reference](#6-reference)
+<!-- toc -->
+
+- [1. Overview](#1-overview)
+- [2. Context management issues](#2-context-management-issues)
+- [3. File synchronization problems](#3-file-synchronization-problems)
+- [4. Code quality issues](#4-code-quality-issues)
+- [5. Workflow best practices](#5-workflow-best-practices)
+- [6. Troubleshooting](#6-troubleshooting)
+- [7. Reference](#7-reference)
+
+<!-- tocstop -->
 
 ---
 
-## 0. Overview
+## 1. Overview
 
-AI coding agents accelerate development but introduce new failure modes. Understanding these patterns transforms you from a passive user into an effective **Agent Orchestrator**—someone who guides, validates, and corrects AI outputs strategically.
+AI coding agents accelerate development but introduce new failure modes. Understanding these patterns transforms you from a passive user into an effective **Agent Orchestrator**, someone who guides, validates, and corrects AI outputs strategically.
 
 ```mermaid
 flowchart TB
@@ -39,11 +43,11 @@ Treat AI-generated code as **tentative suggestions from a capable but fallible a
 
 ---
 
-## 1. Context management issues
+## 2. Context management issues
 
-Context management is the most common source of agent failures. The agent operates within a limited context window—when this fills up or becomes cluttered, performance degrades significantly.
+Context management is the most common source of agent failures. The agent operates within a limited context window. When this fills up or becomes cluttered, performance degrades significantly.
 
-### 1.1 Context loss and infinite loops
+### 2.1 Context loss and infinite loops
 
 **Problem:** The agent loses track of its progress within a task, repeatedly searching for the same information or applying the same fix.
 
@@ -64,9 +68,9 @@ Context management is the most common source of agent failures. The agent operat
 > [!TIP]
 > If the agent enters a loop, don't try to fix it within the same session. Start a new chat with a clearer, more focused prompt.
 
-### 1.2 Hallucination and irrelevant suggestions
+### 2.2 Hallucination and irrelevant suggestions
 
-**Problem:** The agent generates plausible-looking but incorrect code—referencing non-existent functions, using wrong APIs, or ignoring your actual codebase structure.
+**Problem:** The agent generates plausible-looking but incorrect code, referencing non-existent functions, using wrong APIs, or ignoring your actual codebase structure.
 
 **Symptoms:**
 - Code references functions or variables that don't exist
@@ -79,17 +83,17 @@ Context management is the most common source of agent failures. The agent operat
 - **Include error messages:** Paste actual error output rather than describing it
 - **Specify constraints:** Mention your framework, versions, and architectural patterns
 
-```
+```text
 # Bad prompt
 "Fix the authentication bug"
 
 # Good prompt
 @file:src/auth/login.ts
-"The login function throws 'TypeError: Cannot read property email of undefined' 
+"The login function throws 'TypeError: Cannot read property email of undefined'
 when the user object is null. Add null checking before accessing user.email."
 ```
 
-### 1.3 Lost in the middle
+### 2.3 Lost in the middle
 
 **Problem:** When context becomes very long, agents tend to focus on information at the beginning and end, "forgetting" details in the middle.
 
@@ -101,9 +105,9 @@ when the user object is null. Add null checking before accessing user.email."
 
 ---
 
-## 2. File synchronization problems
+## 3. File synchronization problems
 
-### 2.1 Unsaved changes causing loops
+### 3.1 Unsaved changes causing loops
 
 **Problem:** The agent applies code changes that register in the editor buffer but aren't immediately written to disk. When the agent re-reads the file, it sees the old content and attempts the same edit again.
 
@@ -114,47 +118,31 @@ when the user object is null. Add null checking before accessing user.email."
 
 **Solutions:**
 
-| Setting | Recommendation |
-| ------- | -------------- |
-| Autosave | Enable `files.autoSave: "afterDelay"` with 1000ms delay |
+| Action | How to do it |
+| ------ | ------------ |
+| Enable autosave | See [Setup fundamentals > Enable autosave][setup-fundamentals] |
 | Manual save | Press `Cmd+S` / `Ctrl+S` after each AI edit |
 | Watch indicators | Check for unsaved dots before allowing agent to continue |
-
-**Enable autosave in settings:**
-
-```json
-{
-  "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 1000
-}
-```
 
 > [!WARNING]
 > If you notice the agent applying the same change repeatedly, **stop immediately**. Save the file manually, then verify the change was applied before continuing.
 
-### 2.2 Version control as safety net
+### 3.2 Version control as safety net
 
 Always commit working code before starting significant AI-assisted changes. This provides instant rollback capability.
 
-**Quick recovery commands:**
-
-| Situation | Command |
-| --------- | ------- |
-| Discard all uncommitted changes | `git reset --hard` |
-| Undo last commit, keep changes | `git reset --soft HEAD~1` |
-| Undo last commit, discard changes | `git reset --hard HEAD~1` |
-| View recent commits | `git log --oneline -10` |
+For git undo commands (`git reset`, `git restore`), see [Setup fundamentals > Undo commands][setup-fundamentals].
 
 > [!TIP]
 > Commit after each successful AI-assisted change. Small, frequent commits make it easy to identify exactly where things went wrong.
 
 ---
 
-## 3. Code quality issues
+## 4. Code quality issues
 
-### 3.1 The "junior developer" pattern
+### 4.1 The "junior developer" pattern
 
-AI agents can behave like inexperienced developers—producing code that works superficially but contains subtle logic errors, missing edge cases, or architectural problems.
+AI agents can behave like inexperienced developers, producing code that works superficially but contains subtle logic errors, missing edge cases, or architectural problems.
 
 **Common issues:**
 - Removing essential null checks or error handling
@@ -168,17 +156,17 @@ AI agents can behave like inexperienced developers—producing code that works s
 - **Specify what to preserve:** Explicitly mention code that should not be changed
 - **Review diffs carefully:** Check every change before accepting, not just the new code
 
-```
+```text
 # Risky prompt
 "Refactor the user service to use async/await"
 
 # Safer prompt
-"In @file:src/services/userService.ts, convert the fetchUser function 
-(lines 45-60) to use async/await. Keep all existing error handling 
+"In @file:src/services/userService.ts, convert the fetchUser function
+(lines 45-60) to use async/await. Keep all existing error handling
 and don't modify other functions."
 ```
 
-### 3.2 Enforcing validation with tests
+### 4.2 Enforcing validation with tests
 
 LLMs cannot self-verify their logic. Compensate by having the agent write tests alongside implementation.
 
@@ -188,20 +176,20 @@ LLMs cannot self-verify their logic. Compensate by having the agent write tests 
 2. Then implement the feature
 3. Run tests to validate
 
-```
+```text
 "Using TDD, implement a validateEmail function:
 1. First write tests for: valid emails, invalid formats, empty input, null input
 2. Then implement the function to pass all tests"
 ```
 
 > [!NOTE]
-> Tests written by AI also need review—but they provide an additional layer of validation and documentation for expected behavior.
+> Tests written by AI also need review, but they provide an additional layer of validation and documentation for expected behavior.
 
 ---
 
-## 4. Workflow best practices
+## 5. Workflow best practices
 
-### 4.1 The orchestrator mindset
+### 5.1 The orchestrator mindset
 
 Shift from "coder who uses AI" to "orchestrator who directs AI":
 
@@ -212,7 +200,7 @@ Shift from "coder who uses AI" to "orchestrator who directs AI":
 | One big request | Multiple small, focused requests |
 | Hope it works | Verify with tests and manual review |
 
-### 4.2 Effective prompting strategies
+### 5.2 Effective prompting strategies
 
 **Structure your prompts:**
 
@@ -223,7 +211,7 @@ Shift from "coder who uses AI" to "orchestrator who directs AI":
 
 **Example structured prompt:**
 
-```
+```text
 Context: @file:src/components/UserProfile.tsx
 
 Goal: Add loading state while fetching user data
@@ -239,7 +227,7 @@ Success criteria:
 - No layout shift when transitioning states
 ```
 
-### 4.3 When to stop and restart
+### 5.3 When to stop and restart
 
 Recognize when a session has gone off track:
 
@@ -255,7 +243,7 @@ Recognize when a session has gone off track:
 3. Rollback problematic changes: `git restore .`
 4. Start a fresh chat with lessons learned incorporated into the prompt
 
-### 4.4 Use Plan Mode for complex tasks
+### 5.4 Use Plan Mode for complex tasks
 
 For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 
@@ -268,7 +256,7 @@ For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 
 ---
 
-## 5. Troubleshooting
+## 6. Troubleshooting
 
 | Problem | Likely cause | Solution |
 | ------- | ------------ | -------- |
@@ -282,31 +270,9 @@ For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 
 ---
 
-## 6. Reference
+## 7. Reference
 
-### Key settings
-
-| Setting | Value | Purpose |
-| ------- | ----- | ------- |
-| `files.autoSave` | `"afterDelay"` | Prevent file sync issues |
-| `files.autoSaveDelay` | `1000` | Save after 1 second of inactivity |
-
-### Context symbols
-
-| Symbol | Usage |
-| ------ | ----- |
-| `@file` | Reference specific file |
-| `@folder` | Reference directory |
-| `@docs` | Include external documentation |
-| `@git` | Reference git changes |
-
-### Chat modes
-
-| Mode | Shortcut | Best for |
-| ---- | -------- | -------- |
-| Agent | `Cmd+I` / `Ctrl+I` | Implementation tasks |
-| Plan | `Cmd+P` / `Ctrl+P` | Complex planning and research |
-| Ask | — | Questions about codebase |
+For Cursor settings, context symbols, and chat modes, see [Setup fundamentals][setup-fundamentals].
 
 ### Documentation
 
@@ -316,8 +282,8 @@ For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 - [Cursor Forum][cursor-forum]
 
 <!-- Link definitions -->
+[setup-fundamentals]: 1-setup-fundamentals.md
 [cursor-docs]: https://docs.cursor.com
 [cursor-rules]: https://docs.cursor.com/context/rules
 [cursor-security]: https://docs.cursor.com/account/agent-security
 [cursor-forum]: https://forum.cursor.com
-

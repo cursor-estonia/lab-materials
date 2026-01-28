@@ -2,18 +2,22 @@
 
 ## Table of Contents
 
-- [0. Overview](#0-overview)
-- [1. Prerequisites](#1-prerequisites)
-- [2. Vercel deployment](#2-vercel-deployment)
-- [3. Environment variables](#3-environment-variables)
-- [4. Other platforms](#4-other-platforms)
-- [5. Security basics](#5-security-basics)
-- [6. Troubleshooting](#6-troubleshooting)
-- [7. Reference](#7-reference)
+<!-- toc -->
+
+- [1. Overview](#1-overview)
+- [2. Prerequisites](#2-prerequisites)
+- [3. Vercel deployment](#3-vercel-deployment)
+- [4. Environment variables](#4-environment-variables)
+- [5. Other platforms](#5-other-platforms)
+- [6. Security basics](#6-security-basics)
+- [7. Troubleshooting](#7-troubleshooting)
+- [8. Reference](#8-reference)
+
+<!-- tocstop -->
 
 ---
 
-## 0. Overview
+## 1. Overview
 
 Deployment makes your code accessible on the internet via a URL.
 
@@ -48,7 +52,7 @@ flowchart LR
 
 ---
 
-## 1. Prerequisites
+## 2. Prerequisites
 
 1. Complete [Setup fundamentals][setup-fundamentals]
 2. Install Node.js:
@@ -61,7 +65,7 @@ flowchart LR
 
 ---
 
-## 2. Vercel deployment
+## 3. Vercel deployment
 
 **Vercel** is a deployment platform optimized for frontend frameworks and static sites. It connects to your Git repository and automatically deploys your code whenever you push changes.
 
@@ -83,7 +87,9 @@ flowchart LR
 You get a URL like: `https://your-project.vercel.app`
 
 > [!NOTE]
-> Vercel automatically provides a unique preview URL for every branch and pull request. This makes it easy to test changes before merging to production.
+> Check your deployment visibility in Project Settings > Deployment Protection. Vercel Authentication restricts access to team members only. See [Deployment Protection docs](https://vercel.com/docs/security/deployment-protection).
+
+Vercel automatically provides a unique preview URL for every branch and pull request, making it easy to test changes before merging.
 
 ### Automatic deployments
 
@@ -100,7 +106,7 @@ You get a URL like: `https://your-project.vercel.app`
 
 ---
 
-## 3. Environment variables
+## 4. Environment variables
 
 **Environment variables** are configuration values stored outside your code. They hold sensitive data like API keys, database URLs, and secrets. Never commit them to Git.
 
@@ -135,7 +141,7 @@ vercel env pull          # Pull vars to local .env
 
 **Next.js note:** Client-side variables must be prefixed with `NEXT_PUBLIC_`
 
-```
+```bash
 NEXT_PUBLIC_API_URL=https://api.example.com  # Accessible in browser
 DATABASE_URL=postgres://...                   # Server-side only
 ```
@@ -144,7 +150,7 @@ DATABASE_URL=postgres://...                   # Server-side only
 
 ---
 
-## 4. Other platforms
+## 5. Other platforms
 
 While Vercel is excellent for frontend projects, different platforms serve different needs. Here's a comparison of popular deployment options:
 
@@ -167,7 +173,7 @@ While Vercel is excellent for frontend projects, different platforms serve diffe
 
 ---
 
-## 5. Security basics
+## 6. Security basics
 
 Deployed applications are publicly accessible, making security essential. The most common mistake is accidentally exposing API keys, database credentials, or other secrets in your code.
 
@@ -194,7 +200,7 @@ node_modules
 
 ---
 
-## 6. Troubleshooting
+## 7. Troubleshooting
 
 | Problem                          | Solution                                                 |
 | -------------------------------- | -------------------------------------------------------- |
@@ -214,9 +220,10 @@ node_modules
 
 ---
 
-## 7. Reference
+## 8. Reference
 
 ### Platforms
+
 - [Vercel][vercel] - Frontend deployment platform
 - [Netlify][netlify] - Static site hosting
 - [Railway][railway] - Full-stack deployment with databases
@@ -224,6 +231,7 @@ node_modules
 - [Replit][replit] - Browser-based development and deployment
 
 ### Documentation
+
 - [Vercel Docs][vercel-docs] - Platform documentation
 - [Vercel CLI][vercel-cli] - Command-line deployment tool
 - [Next.js Deployment][nextjs-deployment] - Framework-specific guides
