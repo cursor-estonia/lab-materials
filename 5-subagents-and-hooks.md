@@ -16,7 +16,7 @@
 
 ## 1. Overview
 
-**Subagents** and **hooks** let you extend Cursor's agent with custom automation and parallel execution.
+**Subagents** and **hooks** let you extend Cursor's agent with custom parallel execution and automation.
 
 | Feature | Purpose |
 | ------- | ------- |
@@ -30,8 +30,6 @@
 
 ## 2. Subagents
 
-**Subagents** are independent agents that handle discrete parts of a task. They run in parallel, use their own context, and can be configured with custom prompts, tool access, and models.
-
 ### Key concepts
 
 | Term                      | Meaning                                                                            |
@@ -41,7 +39,7 @@
 | **Specialized expertise** | Create reusable, expert subagents for specific domains (e.g., security, testing)   |
 
 > [!NOTE]
-> Cursor includes three built-in subagents that run automatically: **Explore** (codebase search), **Bash** (shell commands), and **Browser** (web interaction). You don't need to configure them.
+> Cursor includes built-in subagents that run automatically: **Explore** (codebase search), **Bash** (shell commands), and **Browser** (web interaction). These features are updated frequently; check the [docs][subagents-docs] for current state.
 
 ### Custom subagents
 
@@ -59,7 +57,7 @@ Create custom subagents in `.cursor/agents/` (for project-specific) or `~/.curso
 
 ### Exercise 1: Build a verifier subagent
 
-This subagent acts as a skeptical code reviewer to validate the main agent's work. This pattern is recommended in the [official docs][subagents-docs].
+Validates completed work before accepting it as done.
 
 1. **Create the file:** `.cursor/agents/verifier.md`
 2. **Add the content:**
@@ -67,24 +65,18 @@ This subagent acts as a skeptical code reviewer to validate the main agent's wor
     ```yaml
     ---
     name: verifier
-    description: Validates completed work. Use after the agent marks a task done to confirm it actually works.
+    description: Validates completed work. Use after the agent marks a task done.
     model: inherit
     ---
 
-    You are a skeptical validator. Your job is to verify that work claimed as complete actually works.
+    You are a skeptical validator. When invoked:
 
-    When invoked:
-    1. Identify what was claimed to be completed.
-    2. Check that the implementation exists and is functional.
-    3. Run relevant tests or verification steps.
-    4. Look for edge cases that may have been missed.
+    1. Identify what was claimed as completed
+    2. Verify the implementation exists and works
+    3. Run tests and check edge cases
+    4. Report what passed, what failed, and what needs fixing
 
-    Be thorough and skeptical. Report:
-    - What was verified and passed
-    - What was claimed but incomplete or broken
-    - Specific issues that need to be addressed
-
-    Do not accept claims at face value. Test everything.
+    Do not accept claims at face value; verify before confirming.
     ```
 
 3. **Usage:** After the main agent completes a task, invoke your new subagent:
@@ -93,39 +85,8 @@ This subagent acts as a skeptical code reviewer to validate the main agent's wor
     /verifier confirm the implementation is complete and all tests pass.
     ```
 
-### Exercise 2: Build a test runner subagent
-
-This subagent runs tests and fixes failures.
-
-1. **Create the file:** `.cursor/agents/test-runner.md`
-2. **Add the content:**
-
-    ```yaml
-    ---
-    name: test-runner
-    description: Runs tests and fixes failures. Delegate when code changes need validation.
-    model: inherit
-    ---
-
-    You are a test automation expert.
-
-    When delegated a task:
-    1. Run appropriate tests for the changed code.
-    2. If tests fail, analyze the output and identify the root cause.
-    3. Fix the issue while preserving test intent.
-    4. Re-run to verify the fix.
-
-    Report: tests passed/failed, summary of failures, and changes made.
-    ```
-
-3. **Usage:** Ask the agent to delegate test running:
-
-    ```text
-    Run tests for the auth module using the test-runner subagent.
-    ```
-
 > [!TIP]
-> Write clear descriptions so the agent knows when to delegate. The agent reads descriptions to decide which subagent fits the task.
+> Write clear descriptions so the agent knows when to delegate.
 
 **Docs:** [Subagents][subagents-docs]
 
@@ -133,7 +94,7 @@ This subagent runs tests and fixes failures.
 
 ## 3. Hooks
 
-**Hooks** let you observe, control, and extend the agent loop with custom scripts. They run before or after defined stages of the agent's process and can observe, block, or modify its behavior.
+**Hooks** are scripts that run before or after agent actions to observe, block, or modify behavior.
 
 ### Example use cases
 
@@ -157,35 +118,15 @@ Cursor provides a rich set of events to hook into. Here are some of the most com
 
 ### Configuration
 
-Create a `hooks.json` file in `~/.cursor/` (global) or `<project>/.cursor/` (project-specific).
-
-```json
-{
-  "version": 1,
-  "hooks": {
-    "afterFileEdit": [{ "command": "./hooks/format.sh" }]
-  }
-}
-```
+Create a `hooks.json` file in `~/.cursor/` (global) or `<project>/.cursor/` (project-specific). Each hook specifies an event and a command to run.
 
 > [!NOTE]
-> Your hook scripts communicate via **exit codes** and **JSON output**:
->
-> | Exit Code | Meaning |
-> | --------- | ------- |
-> | `0` | Hook succeeded, action proceeds. |
-> | `2` | Block the action. |
-> | Other | Hook failed, action proceeds anyway (fail-open). |
->
-> **Two ways to block an action:**
-> - Exit with code `2`, or
-> - Output `{"permission": "deny"}` with exit `0`
->
-> Both achieve the same result. Use whichever fits your script.
+> Hooks communicate via exit codes: `0` = proceed, `2` = block, other = fail-open (proceed anyway).
+> To block an action, either exit with code `2` or output `{"permission": "deny"}`.
 
-### Exercise 3: Build an audit hook
+### Exercise 2: Build an audit hook
 
-This hook will log all shell commands and file edits to an audit log.
+Logs all shell commands and file edits.
 
 1. **Create `hooks.json`:** In your project's `.cursor/` directory, create `hooks.json`:
 
@@ -216,25 +157,45 @@ This hook will log all shell commands and file edits to an audit log.
 3. **Make it executable:** `chmod +x .cursor/hooks/audit.sh`
 4. **Usage:** As the agent works, check the `.cursor/audit.log` file to see the logged events.
 
-### Exercise 4: Build a "grind until tests pass" hook
+### Exercise 3: Build an autonomous task loop
 
-This powerful pattern uses the `stop` hook to make the agent iterate until a goal is met.
+Combines subagents (avoiding context pollution) with a hook that triggers continuation if the agent stops before tasks are complete.
 
 > [!NOTE]
-> This example uses [Bun](https://bun.sh) for TypeScript execution. Install with `brew install bun` (macOS) or `npm install -g bun`.
+> This example uses [Bun](https://bun.sh) for TypeScript execution. See [installation docs](https://bun.sh/docs/installation).
 
-1. **Create `hooks.json`:**
+1. **Create `TASKS.md`** at your project root with checkbox format:
 
-    ```json
-    {
-      "version": 1,
-      "hooks": {
-        "stop": [{ "command": "bun run .cursor/hooks/grind.ts" }]
-      }
-    }
+    ```markdown
+    # Tasks
+
+    Goal: Add test coverage
+
+    - [ ] Add tests for the main utility functions
+    - [ ] Add tests for API endpoint responses
+    - [ ] Add tests for error handling cases
+    - [ ] Add tests for edge cases (empty input, invalid data)
+    - [ ] Ensure all tests pass
     ```
 
-2. **Create the script:** In `.cursor/hooks/`, create `grind.ts`:
+2. **Create the implementer subagent:** In `.cursor/agents/`, create `implementer.md`:
+
+    ```yaml
+    ---
+    name: implementer
+    description: Implements tasks from TASKS.md. Delegate coding work to this agent for fresh context.
+    model: inherit
+    ---
+
+    You are an implementation specialist. When delegated:
+
+    1. Read TASKS.md to see current progress
+    2. Implement the next unchecked task
+    3. Mark it complete with [x] in TASKS.md
+    4. Run tests and report status
+    ```
+
+3. **Create the stop hook:** In `.cursor/hooks/`, create `check-tasks.ts`:
 
     ```typescript
     import { readFileSync, existsSync } from "fs";
@@ -246,52 +207,80 @@ This powerful pattern uses the `stop` hook to make the agent iterate until a goa
     }
 
     const input: StopHookInput = await Bun.stdin.json();
-    const MAX_ITERATIONS = 5;
+    const MAX_ITERATIONS = 10; // Default: 5, see loop_limit
 
     if (input.status !== "completed" || input.loop_count >= MAX_ITERATIONS) {
       console.log(JSON.stringify({}));
       process.exit(0);
     }
 
-    const scratchpad = existsSync(".cursor/scratchpad.md")
-      ? readFileSync(".cursor/scratchpad.md", "utf-8")
-      : "";
+    const tasksFile = "TASKS.md";
+    if (!existsSync(tasksFile)) {
+      console.log(JSON.stringify({}));
+      process.exit(0);
+    }
 
-    if (scratchpad.includes("DONE")) {
+    const content = readFileSync(tasksFile, "utf-8");
+    const unchecked = (content.match(/- \[ \]/g) || []).length;
+    const checked = (content.match(/- \[x\]/gi) || []).length;
+
+    if (unchecked === 0) {
       console.log(JSON.stringify({}));
     } else {
       console.log(JSON.stringify({
-        followup_message: `[Iteration ${input.loop_count + 1}/${MAX_ITERATIONS}] Continue working. Update .cursor/scratchpad.md with DONE when complete.`
+        followup_message: `[${checked}/${checked + unchecked} tasks done] ${unchecked} tasks remain. Delegate to /implementer to continue.`
       }));
     }
     ```
 
-3. **Usage:** Prompt the agent: `"Fix all failing tests and write DONE in .cursor/scratchpad.md when finished."`
+4. **Set up `hooks.json`:**
 
-### Exercise 5: Block dangerous commands
+    ```json
+    {
+      "version": 1,
+      "hooks": {
+        "stop": [{ "command": "bun run .cursor/hooks/check-tasks.ts", "loop_limit": 10 }]
+      }
+    }
+    ```
 
-This hook uses a `matcher` to block risky commands.
+5. **Usage:** Prompt the agent:
 
-1. **Add to `hooks.json`:**
+    ```text
+    Complete all tasks in TASKS.md. Use /implementer for each batch of work to keep context fresh.
+    ```
+
+> [!TIP]
+> The IDE has built-in task management, so this file-based approach is more practical for CLI workflows. Testing in IDE helps understand the mechanics. See [Ralph Wiggum Cursor][ralph-repo] for a full CLI implementation.
+
+### Exercise 4: Block commands with matcher
+
+Uses a `matcher` to block commands matching a pattern.
+
+1. **Set up `hooks.json`:**
 
     ```json
     {
       "version": 1,
       "hooks": {
         "beforeShellExecution": [
-          { "command": ".cursor/hooks/block-dangerous.sh", "matcher": "rm -rf|drop table|truncate" }
+          { "command": ".cursor/hooks/block-command.sh", "matcher": "BLOCK_TEST" }
         ]
       }
     }
     ```
 
-2. **Create the script:** In `.cursor/hooks/`, create `block-dangerous.sh`:
+2. **Create the script:** In `.cursor/hooks/`, create `block-command.sh`:
 
     ```bash
     #!/bin/bash
     echo '{"permission": "deny", "user_message": "This command has been blocked for safety."}'
     exit 0
     ```
+
+3. **Make it executable:** `chmod +x .cursor/hooks/block-command.sh`
+
+4. **Test it:** Run `echo BLOCK_TEST` and verify it's blocked. The `BLOCK_TEST` pattern is included for safe testing.
 
 > [!WARNING]
 > The `matcher` field is a regular expression. If the command matches the regex, the hook runs and blocks the command.
@@ -306,83 +295,32 @@ Once you've got hooks and subagents working, combine them for more ambitious wor
 
 ### Orchestrator pattern
 
-A parent agent plans the work, then delegates to specialized subagents:
+The agent could suggest delegating to relevant subagents when they're defined. For complex tasks or when you have specific subagents, always good to be explicit about which ones to use:
 
 ```text
-> "Refactor the auth module. Use the implementer subagent for code changes and the verifier subagent to confirm each change works."
+> "Refactor the auth module. Use subagents: /implementer for code changes and /verifier to confirm each change works."
 ```
 
-The parent stays focused on coordination while subagents handle the grunt work in isolated contexts.
+The parent stays focused on coordination while subagents handle the work in isolated contexts.
 
-### Parallel fan-out
-
-Spawn multiple subagents to work on independent chunks simultaneously:
-
-```text
-> "Spawn subagents: one for frontend refactor, one for backend tests—in parallel"
-```
-
-For true isolation, use git worktrees (select from the agent dropdown). Each subagent works in its own branch, then you merge the results.
-
-### The Ralph loop
-
-An iterative self-improvement pattern where the agent:
-1. Works through tasks (checkboxes in a task file)
-2. Commits progress after each step
-3. Logs errors and derives "guardrails" from failures
-4. Rotates context at token thresholds (e.g., 80k) to stay fresh
-
-The key insight: hooks can detect when the agent is stuck (repeated failures, thrashing) and trigger a context rotation or spawn a fresh subagent to take over.
-
-**Example:** Use a `subagentStop` hook to log results and update progress:
-
-```json
-{
-  "version": 1,
-  "hooks": {
-    "subagentStop": [
-      { "command": ".cursor/hooks/log-subagent.sh" }
-    ]
-  }
-}
-```
-
-The script can parse the subagent's output, update a progress file, and even derive new rules from errors.
-
-> [!TIP]
-> For long-running autonomous work, persist learnings in files like `guardrails.md` that the agent reads on each iteration. Errors become future instructions.
-
-See [Ralph Wiggum Cursor][ralph-repo] for a full implementation of this pattern.
+> [!NOTE]
+> Without git worktrees, parallel agents share the same working directory. Operations like git reset from one agent can undo another agent's changes. For true isolation, use worktrees (select from the agent dropdown). Each agent works on its own branch, then you merge the results.
 
 ---
 
 ## 5. Reference
 
-### Skills vs. subagents vs. rules
-
-| Feature       | Use when...                                                                                   |
-| ------------- | --------------------------------------------------------------------------------------------- |
-| **Rules**     | You need always-on, static context for every conversation                                     |
-| **Skills**    | You need dynamic, procedural "how-to" instructions loaded on demand                           |
-| **Subagents** | You need context isolation, parallel execution, or specialized expertise across many steps    |
-
-### Documentation
-
 - [Cursor 2.4 Changelog][changelog-docs]
 - [Hooks Documentation][hooks-docs]
 - [Subagents Documentation][subagents-docs]
-- [Agent Best Practices][best-practices-docs]
 - [Skills Documentation][skills-docs]
-- [Agent Skills Standard][agent-skills-standard-docs]
-- [Agent Skills Directory][agent-skills-directory-docs]
-- [Ralph Wiggum Cursor][ralph-repo] (iterative loop example)
+- [Agent Best Practices][best-practices-docs]
+- [Ralph Wiggum Cursor][ralph-repo]
 
 <!-- Link definitions -->
 [changelog-docs]: https://cursor.com/changelog/2-4
 [hooks-docs]: https://cursor.com/docs/agent/hooks
 [subagents-docs]: https://cursor.com/docs/context/subagents
-[best-practices-docs]: https://cursor.com/blog/agent-best-practices
 [skills-docs]: https://cursor.com/docs/context/skills
-[agent-skills-standard-docs]: https://agentskills.io/home
-[agent-skills-directory-docs]: https://skills.sh/
+[best-practices-docs]: https://cursor.com/blog/agent-best-practices
 [ralph-repo]: https://github.com/agrimsingh/ralph-wiggum-cursor
