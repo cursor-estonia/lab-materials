@@ -195,45 +195,7 @@ Combines subagents (avoiding context pollution) with a hook that triggers contin
     4. Run tests and report status
     ```
 
-3. **Create the stop hook:** In `.cursor/hooks/`, create `check-tasks.ts`:
-
-    ```typescript
-    import { readFileSync, existsSync } from "fs";
-
-    interface StopHookInput {
-      conversation_id: string;
-      status: "completed" | "aborted" | "error";
-      loop_count: number;
-    }
-
-    const input: StopHookInput = await Bun.stdin.json();
-    const MAX_ITERATIONS = 10; // Default: 5, see loop_limit
-
-    if (input.status !== "completed" || input.loop_count >= MAX_ITERATIONS) {
-      console.log(JSON.stringify({}));
-      process.exit(0);
-    }
-
-    const tasksFile = "TASKS.md";
-    if (!existsSync(tasksFile)) {
-      console.log(JSON.stringify({}));
-      process.exit(0);
-    }
-
-    const content = readFileSync(tasksFile, "utf-8");
-    const unchecked = (content.match(/- \[ \]/g) || []).length;
-    const checked = (content.match(/- \[x\]/gi) || []).length;
-
-    if (unchecked === 0) {
-      console.log(JSON.stringify({}));
-    } else {
-      console.log(JSON.stringify({
-        followup_message: `[${checked}/${checked + unchecked} tasks done] ${unchecked} tasks remain. Delegate to /implementer to continue.`
-      }));
-    }
-    ```
-
-4. **Set up `hooks.json`:**
+3. **Set up `hooks.json`:**
 
     ```json
     {
@@ -241,6 +203,69 @@ Combines subagents (avoiding context pollution) with a hook that triggers contin
       "hooks": {
         "stop": [{ "command": "bun run .cursor/hooks/check-tasks.ts", "loop_limit": 10 }]
       }
+    }
+    ```
+
+4. **Create the hook script:** In `.cursor/hooks/`, create `check-tasks.ts`:
+
+    ```typescript
+    import { readFileSync, existsSync as fileExists } from "fs";
+
+    // When a Cursor agent's turn ends, the IDE runs any registered "stop" hooks.
+    // It pipes a JSON payload to the hook's stdin describing what happened,
+    // and reads the hook's stdout for instructions on what to do next.
+    // Responding with {} means "stop here." Responding with { followup_message }
+    // means "start another agent turn with this message."
+
+    interface StopHookInput {
+      conversation_id: string;
+      status: "completed" | "aborted" | "error";
+      loop_count: number; // how many times this hook has already triggered a follow-up (starts at 0)
+    }
+
+    // Configuration
+    const MAX_ITERATIONS = 10;
+    const tasksPath = "TASKS.md";
+
+    // Read the payload Cursor piped to stdin
+    const input: StopHookInput = await Bun.stdin.json();
+
+    // An empty JSON response tells Cursor "do not continue"
+    const noFollowup = JSON.stringify({});
+
+    const stopLoop = () => {
+      console.log(noFollowup);
+      process.exit(0);
+    };
+
+    // Parse TASKS.md and return a followup message if work remains, or null if done
+    const getFollowup = () => {
+      const content = readFileSync(tasksPath, "utf-8");
+      const completedTasks = (content.match(/- \[x\]/gi) || []).length;
+      const remainingTasks = (content.match(/- \[ \]/g) || []).length;
+      const totalTasks = completedTasks + remainingTasks;
+
+      if (remainingTasks > 0) {
+        return `[${completedTasks}/${totalTasks} done] ${remainingTasks} tasks remain. Delegate to /implementer to continue.`;
+      }
+      return null;
+    };
+
+    // If the agent completed successfully, we haven't looped too many times,
+    // and the tasks file exists, check if there's more work to do.
+    if (
+      input.status === "completed" &&
+      input.loop_count < MAX_ITERATIONS &&
+      fileExists(tasksPath)
+    ) {
+      const followup = getFollowup();
+      if (followup) {
+        console.log(JSON.stringify({ followup_message: followup }));
+      } else {
+        stopLoop();
+      }
+    } else {
+      stopLoop();
     }
     ```
 
