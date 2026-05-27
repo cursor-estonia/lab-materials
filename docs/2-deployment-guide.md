@@ -87,7 +87,7 @@ flowchart LR
 You get a URL like: `https://your-project.vercel.app`
 
 > [!NOTE]
-> Check your deployment visibility in Project Settings > Deployment Protection. Vercel Authentication restricts access to team members only. See [Deployment Protection docs](https://vercel.com/docs/security/deployment-protection).
+> Check your deployment visibility in Project Settings > Deployment Protection. Vercel Authentication restricts access to team members only. See [Deployment Protection docs](https://vercel.com/docs/deployment-protection).
 
 Vercel automatically provides a unique preview URL for every branch and pull request, making it easy to test changes before merging.
 
@@ -207,7 +207,7 @@ node_modules
 | `Module not found`               | Run `npm install package-name`, commit `package.json`    |
 | Works locally, fails deployed    | Check env vars are set in Vercel dashboard               |
 | 404 on page refresh (React/Vite) | Add `vercel.json` with rewrites (see below)              |
-| Node version mismatch            | Add `"engines": { "node": "18.x" }` to `package.json`    |
+| Node version mismatch            | Add `"engines": { "node": "22.x" }` to `package.json`    |
 | Build fails                      | Check logs in Vercel dashboard under deployment > "Logs" |
 
 **Fix for React/Vite 404s:**
@@ -256,7 +256,7 @@ node_modules
 [setup-fundamentals]: 1-setup-fundamentals.md
 [vercel]: https://vercel.com
 [netlify]: https://netlify.com
-[railway]: https://railway.app
+[railway]: https://railway.com
 [render]: https://render.com
 [replit]: https://replit.com
 [nodejs]: https://nodejs.org
@@ -264,7 +264,7 @@ node_modules
 [nvm-windows]: https://github.com/coreybutler/nvm-windows
 [vercel-docs]: https://vercel.com/docs
 [vercel-cli]: https://vercel.com/docs/cli
-[nextjs-deployment]: https://nextjs.org/docs/deployment
+[nextjs-deployment]: https://nextjs.org/docs/pages/getting-started/deploying
 [netlify-docs]: https://docs.netlify.com
-[railway-docs]: https://docs.railway.app
+[railway-docs]: https://docs.railway.com
 [render-docs]: https://render.com/docs
