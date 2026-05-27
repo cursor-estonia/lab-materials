@@ -1,4 +1,4 @@
-# Cafe Cursor lab materials
+# Lab materials
 
 | Document                                                             | Description                                                               |
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -8,7 +8,16 @@
 | [4. Agent security guide](4-agent-security-guide.md)                 | Security vulnerabilities, prompt injection, and hardening practices       |
 | [5. Subagents and hooks](5-subagents-and-hooks.md)                   | Custom subagents, hooks, and scaling patterns for advanced workflows      |
 
-## Questions or feedback?
+## Contributing
 
-- Open an issue in this repo
-- Email: post@cursor-estonia.com
+Requires [mise](https://mise.jdx.dev/) for tool management.
+
+```bash
+mise install          # install tools from mise.toml
+lefthook install      # set up git pre-commit hook
+mise tasks            # list available tasks
+mise lint             # check markdown lint + TOC
+mise lint-fix         # auto-fix lint issues + regenerate TOC
+```
+
+[Issues](../../issues) and PRs welcome.
