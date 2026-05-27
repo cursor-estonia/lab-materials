@@ -7,9 +7,9 @@
 - [1. Overview](#1-overview)
 - [2. Create a Skill with `/create-skill`](#2-create-a-skill-with-create-skill)
 - [3. Configure a Git provider MCP in your project](#3-configure-a-git-provider-mcp-in-your-project)
-- [5. Game project workflow tips](#5-game-project-workflow-tips)
-- [6. Troubleshooting](#6-troubleshooting)
-- [7. Reference](#7-reference)
+- [4. Workflow tips](#4-workflow-tips)
+- [5. Troubleshooting](#5-troubleshooting)
+- [6. Reference](#6-reference)
 
 <!-- tocstop -->
 
@@ -147,32 +147,7 @@ your-project/
 └── ...
 ```
 
-### 3.2 MCP config shape (what the fields mean)
-
-```json
-{
-  "mcpServers": {
-    "server-name": {
-      "command": "npx",
-      "args": ["-y", "package-name"],
-      "env": {
-        "API_KEY": "${env:API_KEY}"
-      }
-    }
-  }
-}
-```
-
-Common fields:
-
-| Field | Purpose |
-| ----- | ------- |
-| `command` | Executable to start the MCP server (`npx`, `node`, `python`, `docker`, etc.) |
-| `args` | Arguments passed to the command |
-| `env` | Environment variables for the server |
-| `envFile` | Load secrets from a file (recommended for tokens) |
-
-### 3.3 Config locations
+### 3.2 Config locations
 
 | Scope | File |
 | ----- | ---- |
@@ -181,21 +156,27 @@ Common fields:
 
 Project config overrides global config for the same server name.
 
-### 3.4 Keep secrets out of git (recommended setup)
+- [Jump to GitLab MCP setup](#34-gitlab-mcp-gitlabcom-or-self-hosted)
+- [Jump to GitHub MCP setup](#36-github-mcp)
 
-Do not commit tokens in `mcp.json`. Use `envFile` (or `${env:...}` interpolation):
+### 3.3 Keep secrets out of git (recommended setup)
 
-`.env` example (add `.env` to `.gitignore`):
+Do not commit tokens in `mcp.json`. Use `envFile`:
+
+Add `.env` to `.gitignore`, then keep provider tokens in `.env`.
+
+GitLab `.env` example:
 
 ```bash
 GITLAB_URL=https://gitlab.example.com
 GITLAB_TOKEN=glpat_...
-GITHUB_PERSONAL_ACCESS_TOKEN=ghp_...
 ```
 
 For GitLab.com, set `GITLAB_URL=https://gitlab.com`.
 
-### 3.5 GitLab MCP (GitLab.com or self-hosted)
+GitLab token and personal access token are available at `GITLAB_URL/-/user_settings/personal_access_tokens`. Set permissions to `api` and `read_repository`.
+
+### 3.4 GitLab MCP (GitLab.com or self-hosted)
 
 This guide uses `mcp-gitlab` (Python-based, run via `uvx`).
 
@@ -213,9 +194,18 @@ Add this to `.cursor/mcp.json`:
 }
 ```
 
+What the fields mean:
+
+| Field | Purpose |
+| ----- | ------- |
+| `command` | Executable to start the MCP server (`npx`, `node`, `python`, `docker`, etc.) |
+| `args` | Arguments passed to the command |
+| `env` | Environment variables for the server (we're using envFile for this) |
+| `envFile` | Load secrets from a file (recommended for tokens) |
+
 If your self-hosted GitLab uses a self-signed certificate in a controlled environment, your MCP server may support a TLS override variable (check server docs, e.g. `GITLAB_SSL_VERIFY=false`).
 
-### 3.6 Verify GitLab MCP is loaded
+### 3.5 Verify GitLab MCP is loaded
 
 1. Open **Settings > Tools & MCP**.
 2. Confirm your server appears and is connected (healthy/green state).
@@ -229,9 +219,17 @@ If your self-hosted GitLab uses a self-signed certificate in a controlled enviro
 
 ---
 
-### 3.7 GitHub MCP
+### 3.6 GitHub MCP
 
-GitHub MCP configuration is the same pattern: pick a server, add it to `.cursor/mcp.json`, keep tokens in `.env`, and test.
+This guide uses `@modelcontextprotocol/server-github` (Node-based, run via `npx`).
+
+GitHub `.env` example:
+
+```bash
+GITHUB_PERSONAL_ACCESS_TOKEN=ghp_...
+```
+
+Create the token in GitHub settings (Developer settings > Personal access tokens) with the minimum scopes needed. For most repository workflows, start with `repo` (and `read:org` if needed).
 
 Add this server to `.cursor/mcp.json`:
 
@@ -247,36 +245,33 @@ Add this server to `.cursor/mcp.json`:
 }
 ```
 
+What the fields mean:
+
+| Field | Purpose |
+| ----- | ------- |
+| `command` | Executable to start the MCP server (`npx`, `node`, `python`, `docker`, etc.) |
+| `args` | Arguments passed to the command |
+| `env` | Environment variables for the server (we're using envFile for this) |
+| `envFile` | Load secrets from a file (recommended for tokens) |
+
 > [!NOTE]
 > GitHub also maintains `github/github-mcp-server`. Community packages vary by feature set; start with the example above, then switch if your team standardizes on the official server.
 
-### 3.8 Verify GitHub MCP is loaded
+### 3.7 Verify GitHub MCP is loaded
 
-```text
-Using the GitHub MCP tools, list open pull requests for this repository and summarize their CI status.
-```
+1. Open **Settings > Tools & MCP**.
+2. Confirm your server appears and is connected (healthy/green state).
+3. In Agent chat, ask:
 
-### Combine Skill + MCP in one prompt
-
-After Exercise 1 and provider setup:
-
-```text
-Follow /code-review-basics and use GitLab MCP to fetch the merge request diff and summarize the top DRY and clean-code risks.
-Return findings by severity.
-```
-
-This is the intended pattern: Skill defines process, MCP executes provider actions.
-
-### Safety checklist for production repos
-
-- Start with read-only operations (list/search/get) before create/update actions.
-- Use narrow token scopes and short-lived tokens where possible.
-- Keep tokens in `.env` or secret manager, never in committed config.
-- Review MCP tool calls like shell commands before approval.
+   ```text
+   Using the GitHub MCP tools, list open pull requests for this repository and summarize their CI status.
+   ```
 
 ---
 
-## 5. Workflow tips
+## 4. Workflow tips
+
+Now you can use these tools in your prompts to query issues, merge requests and pipelines using the git MCP server or have the agent perform a code review using a skill.
 
 Use your new Skill + Git MCP for repeatable studio workflows:
 
@@ -287,16 +282,9 @@ Use your new Skill + Git MCP for repeatable studio workflows:
 | Release candidate | Changelog + approval checklist | List tags/releases, verify green pipelines |
 | Hotfix | Fast-track process and owners | Create hotfix branch/MR, monitor CI |
 
-Suggested daily MCP tool usage:
-
-1. List open MRs/PRs for the game repo
-2. Check latest pipeline status for active branches
-3. Fetch issue/MR details linked to current task
-4. Post summary comment after agent completes implementation
-
 ---
 
-## 6. Troubleshooting
+## 5. Troubleshooting
 
 | Problem | What to check |
 | ------- | ------------- |
@@ -309,7 +297,7 @@ Suggested daily MCP tool usage:
 
 ---
 
-## 7. Reference
+## 6. Reference
 
 ### Cursor docs
 
