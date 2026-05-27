@@ -1,3 +1,5 @@
+ignores:
+  - ".cursor/**"
 config:
   default: true
   MD004:

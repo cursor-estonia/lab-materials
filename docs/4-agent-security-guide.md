@@ -51,10 +51,10 @@ flowchart LR
 
 Cursor can execute terminal commands automatically or with your approval. For configuration options, see [Setup fundamentals > Auto-run modes][setup-fundamentals].
 
-**Recommendation:** Use **Ask Every Time** for sensitive projects.
+**Recommendation:** Set *Auto-Run Mode* to *Allowlist* and **keep your allowlist empty** so every command asks for approval. This prevents the agent from installing dependencies or running commands on your machine unattended (equivalent to the older "Ask Every Time" setting).
 
 > [!WARNING]
-> **Run Everything (Unsandboxed)** allows the agent to execute any command without prompts. This is dangerous in repositories you don't fully trust.
+> **Run Everything (Unsandboxed)** removes all guardrails. Only recommended in isolated environments (e.g. VMs or containers).
 
 ### 2.2 Reviewing commands
 
@@ -216,7 +216,7 @@ function normalFunction() {
 | Defense | Implementation |
 | ------- | -------------- |
 | Review before opening | Inspect unfamiliar repositories before opening in Cursor |
-| Disable auto-run | Use **Ask Every Time** for command execution |
+| Disable auto-run | *Allowlist* with an empty allowlist (see [2.1](#21-auto-run-settings)) |
 | Check commands | Read every command before approving |
 | Trust boundaries | Be extra cautious with third-party or forked code |
 
@@ -334,7 +334,7 @@ Use this checklist before working on sensitive projects:
 
 - [ ] `.cursorignore` includes all sensitive files
 - [ ] `.cursorindexingignore` excludes large/irrelevant directories
-- [ ] Command execution set to **Ask Every Time**
+- [ ] *Allowlist* with an empty allowlist (see [2.1](#21-auto-run-settings))
 - [ ] `.env` files are git-ignored
 
 ### Before accepting AI changes
@@ -392,7 +392,7 @@ If you discover a security vulnerability in Cursor:
 
 <!-- Link definitions -->
 [setup-fundamentals]: 1-setup-fundamentals.md
-[cursor-security]: https://docs.cursor.com/account/agent-security
-[cursor-rules]: https://docs.cursor.com/context/rules
+[cursor-security]: https://cursor.com/docs/agent/security
+[cursor-rules]: https://cursor.com/docs/rules
 [owasp-ai]: https://owaspai.org
-[cursor-advisories]: https://github.com/getcursor/cursor/security/advisories
+[cursor-advisories]: https://github.com/cursor/cursor/security/advisories
