@@ -5,7 +5,7 @@ set -euo pipefail
 markdownlint-cli2 "**/*.md"
 
 fail=0
-for f in *.md; do
+while read -r f; do
   if ! grep -q '<!-- toc -->' "$f"; then
     continue
   fi
@@ -18,6 +18,6 @@ for f in *.md; do
     echo "TOC outdated: $f"
     fail=1
   fi
-done
+done < <(find . -name '*.md')
 
 exit $fail
