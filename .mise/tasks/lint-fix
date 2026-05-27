@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#MISE description="Fix markdown lint issues and regenerate TOC"
+set -euo pipefail
+
+markdownlint-cli2 --fix "**/*.md"
+
+while read -r f; do
+  if grep -q '<!-- toc -->' "$f"; then
+    markdown-toc -i --maxdepth 2 --bullets "-" "$f"
+  fi
+done < <(find . -name '*.md')
