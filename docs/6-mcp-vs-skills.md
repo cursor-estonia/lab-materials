@@ -1,19 +1,17 @@
-# MCP vs Skills
+# MCP vs skills
 
 ## Table of Contents
 
 <!-- toc -->
 
 - [1. Overview](#1-overview)
-- [2. Create a Skill with `/create-skill`](#2-create-a-skill-with-create-skill)
+- [2. Create a skill with `/create-skill`](#2-create-a-skill-with-create-skill)
 - [3. Configure a Git provider MCP in your project](#3-configure-a-git-provider-mcp-in-your-project)
 - [4. Workflow tips](#4-workflow-tips)
 - [5. Troubleshooting](#5-troubleshooting)
 - [6. Reference](#6-reference)
 
 <!-- tocstop -->
-
----
 
 ## 1. Overview
 
@@ -47,9 +45,7 @@ flowchart LR
 
 This guide creates a skill for reviewing code against static rules, then configures a Git provider MCP server for querying issues, merge requests, and pipelines.
 
----
-
-## 2. Create a Skill with `/create-skill`
+## 2. Create a skill with `/create-skill`
 
 ### What gets created
 
@@ -124,15 +120,13 @@ This example creates a skill for reviewing code style based on static rules (Tal
 
 **Docs:** [Skills][skills-docs]
 
----
-
 ## 3. Configure a Git provider MCP in your project
 
-This section combines **general MCP configuration** with concrete setups for **GitLab** (GitLab.com or self-hosted) and **GitHub**.
+This section combines general MCP configuration with concrete setups for GitLab (GitLab.com or self-hosted) and GitHub.
 
 Configure MCPs per project. Each project may need different servers, and unused servers add token overhead.
 
-### 3.1 Create the project config file
+### Create the project config file
 
 Create `.cursor/mcp.json` in your project root:
 
@@ -146,7 +140,7 @@ your-project/
 └── ...
 ```
 
-### 3.2 Config locations
+### Config locations
 
 | Scope   | File                 |
 | ------- | -------------------- |
@@ -155,7 +149,7 @@ your-project/
 
 Project config overrides global config for the same server name.
 
-### 3.3 Keep secrets out of git
+### Keep secrets out of git
 
 Do not commit tokens in `mcp.json`.
 
@@ -167,17 +161,17 @@ Add `.env` to `.gitignore` when you use PAT-based setups loaded from files. Also
 
 Set up a provider:
 
-- [GitLab MCP](#34-gitlab-mcp-gitlabcom-or-self-hosted)
-- [GitHub MCP](#35-github-mcp)
+- [GitLab MCP](#gitlab-mcp-gitlabcom-or-self-hosted)
+- [GitHub MCP](#github-mcp)
 
-### 3.4 GitLab MCP (GitLab.com or self-hosted)
+### GitLab MCP (GitLab.com or self-hosted)
 
 There are two options for GitLab: official and community. Official is recommended for GitLab Premium/Ultimate users.
 
-- [Official GitLab MCP (requires GitLab Premium/Ultimate)](#341-official-gitlab-mcp-recommended)
-- [Community stdio MCP (for GitLab Community Edition and self-hosted)](#342-community-mcp-server-pat-based-alternative)
+- [Official GitLab MCP (requires GitLab Premium/Ultimate)](#official-gitlab-mcp-recommended)
+- [Community stdio MCP (for GitLab Community Edition and self-hosted)](#community-mcp-server-pat-based-alternative)
 
-#### 3.4.1 Official GitLab MCP (recommended)
+#### Official GitLab MCP (recommended)
 
 GitLab ships a built-in MCP endpoint at:
 
@@ -221,7 +215,7 @@ For GitLab.com, use `https://gitlab.com/api/v4/mcp`.
 
 **Docs:** [GitLab MCP server][gitlab-mcp-docs], [MCP][mcp-docs]
 
-#### 3.4.2 Community MCP server (PAT-based alternative)
+#### Community MCP server (PAT-based alternative)
 
 If your instance does not expose the official endpoint (GitLab Community Edition), use [`zereight/gitlab-mcp`][zereight-gitlab-mcp] (`@zereight/mcp-gitlab` on npm).
 
@@ -269,9 +263,7 @@ What the fields mean:
    Using GitLab MCP tools, list open merge requests in our main project and summarize pipeline status.
    ```
 
----
-
-### 3.5 GitHub MCP
+### GitHub MCP
 
 #### Prerequisites
 
@@ -309,7 +301,7 @@ What the fields mean:
 > [!NOTE]
 > GitHub's remote server currently expects a PAT in headers (not OAuth). Cursor remote MCP entries also do not support `envFile`; use `${env:...}` instead.
 
-### 3.6 Verify GitHub MCP is loaded
+#### Verify GitHub MCP is loaded
 
 1. Restart Cursor after saving `mcp.json`.
 2. Open **Settings > Tools & MCP**.
@@ -321,8 +313,6 @@ What the fields mean:
    ```
 
 **Docs:** [Install GitHub MCP in Cursor][github-mcp-cursor-install]
-
----
 
 ## 4. Workflow tips
 
@@ -336,8 +326,6 @@ Combine skills and MCP servers for repeatable project workflows:
 | Hotfix            | Fast-track process and owners     | Create hotfix branch/MR, monitor CI        |
 
 For common operations (listing PRs, checking CI) the agent can use `gh` or `glab` directly in the shell without MCP setup. Use skills for multi-step workflows: define the steps once and share them with the team instead of re-prompting each time.
-
----
 
 ## 5. Troubleshooting
 
@@ -353,11 +341,9 @@ For common operations (listing PRs, checking CI) the agent can use `gh` or `glab
 | Agent ignores skill              | Mention skill directly: `Follow /code-review-basics ...`                                                |
 | `npx` fails on Windows           | Use Cursor docs pattern: `command: "cmd"` with `args: ["/c", "npx", ...]`                               |
 
----
-
 ## 6. Reference
 
-### Cursor docs
+### Documentation
 
 - [Skills][skills-docs]
 - [MCP][mcp-docs]

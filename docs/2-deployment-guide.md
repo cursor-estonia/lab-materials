@@ -15,8 +15,6 @@
 
 <!-- tocstop -->
 
----
-
 ## 1. Overview
 
 Deployment makes your code accessible on the internet via a URL.
@@ -50,8 +48,6 @@ flowchart LR
 | **Preview**               | A test version to check before going live             |
 | **Environment variables** | Secret configuration values (API keys, database URLs) |
 
----
-
 ## 2. Prerequisites
 
 1. Complete [Setup fundamentals][setup-fundamentals]
@@ -62,8 +58,6 @@ flowchart LR
 
 > [!TIP]
 > For managing multiple Node.js versions, install [n][n-version-manager] (macOS/Linux) or [nvm-windows][nvm-windows]. This lets you switch between versions easily.
-
----
 
 ## 3. Vercel deployment
 
@@ -89,8 +83,6 @@ You get a URL like: `https://your-project.vercel.app`
 > [!NOTE]
 > Check your deployment visibility in Project Settings > Deployment Protection. Vercel Authentication restricts access to team members only. See [Deployment Protection docs](https://vercel.com/docs/deployment-protection).
 
-Vercel provides a unique preview URL for every branch and pull request.
-
 ### Automatic deployments
 
 | Action               | Result                                    |
@@ -104,13 +96,11 @@ Vercel provides a unique preview URL for every branch and pull request.
 
 **Docs:** [Vercel][vercel-docs]
 
----
-
 ## 4. Environment variables
 
 **Environment variables** are configuration values stored outside your code. They hold sensitive data like API keys, database URLs, and secrets. Never commit them to Git.
 
-### Via Dashboard
+### Via dashboard
 
 1. Go to Project > Settings > Environment Variables
 2. Add name + value
@@ -148,8 +138,6 @@ DATABASE_URL=postgres://...                   # Server-side only
 
 **Docs:** [Vercel CLI][vercel-cli]
 
----
-
 ## 5. Other platforms
 
 Other platforms serve different needs:
@@ -170,8 +158,6 @@ Other platforms serve different needs:
 | Next.js app                 | Vercel            |
 | Need a database             | Railway or Render |
 | No local setup              | Replit            |
-
----
 
 ## 6. Security basics
 
@@ -198,8 +184,6 @@ node_modules
 - [ ] No hardcoded API keys in source
 - [ ] HTTPS enabled (automatic on Vercel/Netlify)
 
----
-
 ## 7. Troubleshooting
 
 | Problem                          | Solution                                                 |
@@ -217,8 +201,6 @@ node_modules
   "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
 ```
-
----
 
 ## 8. Reference
 

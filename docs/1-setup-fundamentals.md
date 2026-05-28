@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-- [1. What is Cursor?](#1-what-is-cursor)
+- [1. Overview](#1-overview)
 - [2. Install Cursor](#2-install-cursor)
 - [3. Cursor setup](#3-cursor-setup)
 - [4. Terminal basics](#4-terminal-basics)
@@ -15,9 +15,7 @@
 
 <!-- tocstop -->
 
----
-
-## 1. What is Cursor?
+## 1. Overview
 
 Cursor is an AI code editor. It uses large language models to help you generate, edit, and understand code.
 
@@ -36,8 +34,6 @@ Cursor is an AI code editor. It uses large language models to help you generate,
 
 **Learn more:** [Cursor Concepts][cursor-concepts]
 
----
-
 ## 2. Install Cursor
 
 1. Download [Cursor][cursor-download] and run the installer
@@ -46,8 +42,6 @@ Cursor is an AI code editor. It uses large language models to help you generate,
 
 > [!NOTE]
 > 2FA is required for contributors and recommended for everyone.
-
----
 
 ## 3. Cursor setup
 
@@ -71,7 +65,7 @@ Connecting your GitHub account lets you push code to repositories and collaborat
 2. Type "GitHub: Sign in" and press Enter
 3. Authorize Cursor in the browser popup
 
-Once signed in, you can ask the Agent to commit and push changes for you. It writes descriptive commit messages automatically. You can also use the **Source Control** tab in the left sidebar for manual control.
+Once signed in, you can ask the agent to commit and push changes for you. It writes descriptive commit messages automatically. You can also use the **Source Control** tab in the left sidebar for manual control.
 
 **Docs:** [Cursor GitHub Integration][cursor-github]
 
@@ -123,7 +117,7 @@ build/
 
 **Docs:** [Cursor Rules][cursor-rules]
 
-### Using the Agent
+### Using the agent
 
 #### Context symbols
 
@@ -167,14 +161,12 @@ Three layers govern agent network access: **Fetch Domain Allowlist** in Cursor S
 | Cycle reasoning effort for selected model | `Cmd+Shift+/` | `Ctrl+Shift+/` |
 | Toggle Agent/Editor view                  | `Cmd+E`       | `Ctrl+E`       |
 
----
-
 ## 4. Terminal basics
 
 The **terminal** is an application for executing text commands instead of using a graphical interface. The **shell** is the program that interprets your commands (bash, zsh, etc.). On macOS, use the built-in **Terminal** app. On Windows, use **Git Bash** (installed with Git).
 
 > [!NOTE]
-> You can use Cursor without knowing terminal commands. The Agent can run commands for you, and the Git tab in the left sidebar handles git visually. Learn these commands when you want more control.
+> You can use Cursor without knowing terminal commands. The agent can run commands for you, and the Git tab in the left sidebar handles git visually. Learn these commands when you want more control.
 
 **Commands:**
 
@@ -197,8 +189,6 @@ The **terminal** is an application for executing text commands instead of using 
 | Up     | Previous command        |
 | Ctrl+C | Cancel current command  |
 
----
-
 ## 5. Package managers
 
 A **package manager** is a tool that installs and updates software from the command line. Instead of downloading installers from websites, you run a single command.
@@ -220,8 +210,6 @@ A **package manager** is a tool that installs and updates software from the comm
 > **macOS:** If git isn't available, running `git --version` will prompt macOS to install Xcode Command Line Tools automatically.
 >
 > **Windows:** Use **Git Bash** for terminal commands (installed with Git). WSL works too but adds complexity.
-
----
 
 ## 6. Git basics
 
@@ -272,7 +260,7 @@ git config --global user.email "your@email.com"
 
 ### Inspecting agent changes
 
-When the Agent makes changes, use these commands to see what happened:
+When the agent makes changes, use these commands to see what happened:
 
 ```bash
 git status                    # Show what files changed
@@ -313,8 +301,6 @@ A dedicated Git GUI makes it easier to browse many commits at once in a larger v
 
 **Docs:** [Git][git-docs]
 
----
-
 ## 7. Troubleshooting
 
 | Problem                     | Solution                                                      |
@@ -323,8 +309,6 @@ A dedicated Git GUI makes it easier to browse many commits at once in a larger v
 | GitHub authentication fails | Re-run "GitHub: Sign in" from command palette (`Cmd+Shift+P`) |
 | Agent can't see my files    | Verify `.cursorignore` is not excluding them                  |
 | New packages not working    | Run `npm install` manually after adding dependencies          |
-
----
 
 ## 8. Reference
 

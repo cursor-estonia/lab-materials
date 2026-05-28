@@ -14,8 +14,6 @@
 
 <!-- tocstop -->
 
----
-
 ## 1. Overview
 
 AI coding agents can read files, execute commands, and modify your codebase. Unchecked, this access can expose secrets or run destructive commands.
@@ -43,11 +41,9 @@ flowchart LR
 
 **Never grant the agent more access than necessary.** Review commands before execution, exclude sensitive files from indexing, and know what the agent can see and do.
 
----
-
 ## 2. Command execution risks
 
-### 2.1 Auto-run settings
+### Auto-run settings
 
 See [Setup fundamentals > Auto-run modes][setup-fundamentals] for the mode table, sandbox behavior, and the recommended default (**Allowlist (with Sandbox)**).
 
@@ -56,7 +52,7 @@ For high-sensitivity projects, use **Allowlist** with an empty allowlist so ever
 > [!WARNING]
 > **Run Everything (Unsandboxed)** removes all guardrails. Only use it in isolated environments (VMs, containers).
 
-### 2.2 Reviewing commands
+### Reviewing commands
 
 Before approving any command, verify:
 
@@ -80,11 +76,9 @@ sudo anything
 rm -rf /path/to/directory
 ```
 
----
-
 ## 3. Sensitive data protection
 
-### 3.1 What the agent can access
+### What the agent can access
 
 By default, the agent can read and index most files in your workspace. This includes:
 
@@ -93,7 +87,7 @@ By default, the agent can read and index most files in your workspace. This incl
 - Environment files (if not excluded)
 - Documentation
 
-### 3.2 Excluding sensitive files
+### Excluding sensitive files
 
 Use `.cursorignore` to prevent the agent from reading specific files:
 
@@ -128,7 +122,7 @@ dist/
 > [!IMPORTANT]
 > Add `.cursorignore` entries **before** the agent processes sensitive files. Once the agent reads a file, its contents may persist in chat context.
 
-### 3.3 Secrets in AI-generated code
+### Secrets in AI-generated code
 
 AI-generated code may include hardcoded secrets, especially when:
 
@@ -155,7 +149,7 @@ const apiKey = "sk-live-abc123xyz";
 const apiKey = process.env.API_KEY;
 ```
 
-### 3.4 Environment variable patterns
+### Environment variable patterns
 
 When the agent generates configuration code, ensure it follows secure patterns:
 
@@ -179,11 +173,9 @@ const publicApiUrl = process.env.NEXT_PUBLIC_API_URL;
 > [!WARNING]
 > Never prefix sensitive secrets with `NEXT_PUBLIC_` or equivalent framework prefixes. This exposes them to the browser.
 
----
-
 ## 4. Prompt injection attacks
 
-### 4.1 What is prompt injection?
+### What is prompt injection?
 
 Prompt injection uses malicious content in files or inputs to make the agent perform unintended actions. This can happen through:
 
@@ -191,7 +183,7 @@ Prompt injection uses malicious content in files or inputs to make the agent per
 - Compromised dependencies
 - Crafted file contents in cloned repositories
 
-### 4.2 Attack vectors
+### Attack vectors
 
 **Malicious comments in code:**
 
@@ -221,7 +213,7 @@ function normalFunction() {
 }
 ```
 
-### 4.3 Defensive practices
+### Defensive practices
 
 | Defense               | Implementation                                                                                                                         |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
@@ -233,7 +225,7 @@ function normalFunction() {
 > [!TIP]
 > When cloning unfamiliar repositories, review the codebase in a simple text editor first. Look for suspicious comments, scripts, or configuration files.
 
-### 4.4 Context isolation
+### Context isolation
 
 To prevent context contamination between projects:
 
@@ -241,11 +233,9 @@ To prevent context contamination between projects:
 2. **Clear chat history** when moving between trust boundaries
 3. **Use separate Cursor windows** for projects with different trust levels
 
----
-
 ## 5. Configuration security
 
-### 5.1 Recommended .cursorignore
+### Recommended .cursorignore
 
 Create a `.cursorignore` file:
 
@@ -282,7 +272,7 @@ serviceAccountKey.json
 logs/
 ```
 
-### 5.2 Git ignore alignment
+### Git ignore alignment
 
 Ensure your `.gitignore` includes at minimum:
 
@@ -312,7 +302,7 @@ Thumbs.db
 > [!NOTE]
 > `.cursorignore` and `.gitignore` serve different purposes. A file can be git-ignored but still readable by the agent. Use both to cover agent access and version control.
 
-### 5.3 Project rules for security
+### Project rules for security
 
 Create security-focused rules in `.cursor/rules/security.md`:
 
@@ -336,8 +326,6 @@ Create security-focused rules in `.cursor/rules/security.md`:
 - Do not execute commands that require sudo/admin privileges
 - Do not execute commands that make network requests to unknown hosts
 ```
-
----
 
 ## 6. Security checklist
 
@@ -371,8 +359,6 @@ Use this checklist before working on sensitive projects:
 - [ ] Check `package.json` scripts for suspicious commands
 - [ ] Inspect any `.cursor` or `.vscode` configuration
 - [ ] Consider opening in restricted/sandbox mode first
-
----
 
 ## 7. Reference
 
