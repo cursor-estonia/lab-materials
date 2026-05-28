@@ -407,7 +407,7 @@ If you discover a security vulnerability in Cursor:
 
 <!-- Link definitions -->
 
-[setup-fundamentals]: 1-setup-fundamentals.md
+[setup-fundamentals]: 1-setup-fundamentals.md#auto-run-modes
 [cursor-security]: https://cursor.com/docs/agent/security
 [cursor-rules]: https://cursor.com/docs/rules
 [owasp-ai]: https://owaspai.org

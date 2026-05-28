@@ -165,8 +165,10 @@ Do not commit tokens in `mcp.json`.
 
 Add `.env` to `.gitignore` when you use PAT-based setups loaded from files. Also add it to `.cursorignore` so the agent cannot read your tokens (see [Agent security guide](4-agent-security-guide.md)).
 
-- [Jump to GitLab MCP setup](#34-gitlab-mcp-gitlabcom-or-self-hosted)
-- [Jump to GitHub MCP setup](#35-github-mcp)
+Set up a provider:
+
+- [GitLab MCP](#34-gitlab-mcp-gitlabcom-or-self-hosted)
+- [GitHub MCP](#35-github-mcp)
 
 ### 3.4 GitLab MCP (GitLab.com or self-hosted)
 
