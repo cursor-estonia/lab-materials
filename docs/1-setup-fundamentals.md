@@ -32,6 +32,7 @@ Cursor is an AI code editor. It uses large language models to help you generate,
 | **Ask**          | Ask questions about your codebase                     | User assignable    |
 | **Debug**        | Diagnose and fix bugs using runtime traces            | User assignable    |
 | **Agent Review** | Review all changes against main branch for issues     | User assignable    |
+| **Multitask**    | Delegate work to parallel background subagents        | User assignable    |
 
 **Learn more:** [Cursor Concepts][cursor-concepts]
 

@@ -16,7 +16,7 @@
 
 ## 1. Overview
 
-**Subagents** and **hooks** let you extend Cursor's agent with custom parallel execution and automation.
+**Subagents** and **hooks** extend Cursor's agent: subagents run tasks in parallel, hooks run scripts before or after agent actions.
 
 | Feature | Purpose |
 | ------- | ------- |
@@ -39,7 +39,7 @@
 | **Specialized expertise** | Create reusable, expert subagents for specific domains (e.g., security, testing)   |
 
 > [!NOTE]
-> Cursor includes built-in subagents that run automatically: **Explore** (codebase search), **Bash** (shell commands), and **Browser** (web interaction). These features are updated frequently; check the [docs][subagents-docs] for current state.
+> Cursor includes built-in subagents that run automatically: **Explore** (codebase search), **Bash** (shell commands), and **Browser** (web interaction). Check the [docs][subagents-docs] for current capabilities.
 
 ### Custom subagents
 
@@ -94,8 +94,6 @@ Validates completed work before accepting it as done.
 
 ## 3. Hooks
 
-**Hooks** are scripts that run before or after agent actions to observe, block, or modify behavior.
-
 ### Example use cases
 
 | Use case          | Description                                                              |
@@ -106,7 +104,7 @@ Validates completed work before accepting it as done.
 
 ### Hook events
 
-Cursor provides a rich set of events to hook into. Here are some of the most common:
+Common events:
 
 | Event                           | When it fires                          |
 | ------------------------------- | -------------------------------------- |
@@ -159,7 +157,7 @@ Logs all shell commands and file edits.
 
 ### Exercise 3: Build an autonomous task loop
 
-Combines subagents (avoiding context pollution) with a hook that triggers continuation if the agent stops before tasks are complete.
+Uses subagents to keep context fresh and a hook to restart the agent if tasks remain.
 
 > [!NOTE]
 > This example uses [Bun](https://bun.sh) for TypeScript execution. See [installation docs](https://bun.sh/docs/installation).
@@ -206,7 +204,7 @@ Combines subagents (avoiding context pollution) with a hook that triggers contin
     }
     ```
 
-    The iteration cap is enforced by the hook script itself via `MAX_ITERATIONS` below, using the `loop_count` field Cursor passes in on stdin.
+    The hook script enforces the iteration cap via `MAX_ITERATIONS`, reading `loop_count` from stdin.
 
 4. **Create the hook script:** In `.cursor/hooks/`, create `check-tasks.ts`:
 
@@ -278,7 +276,7 @@ Combines subagents (avoiding context pollution) with a hook that triggers contin
     ```
 
 > [!TIP]
-> The IDE has built-in task management, so this file-based approach is more practical for CLI workflows. Testing in IDE helps understand the mechanics. See [Ralph Wiggum Cursor][ralph-repo] for a full CLI implementation.
+> The IDE has built-in task management, so this file-based approach is more practical for CLI workflows. Test in the IDE to understand the mechanics. See [Ralph Wiggum Cursor][ralph-repo] for a full CLI implementation.
 
 ### Exercise 4: Block commands with matcher
 
@@ -318,20 +316,24 @@ Uses a `matcher` to block commands matching a pattern.
 
 ## 4. Scaling patterns
 
-Once you've got hooks and subagents working, combine them for more ambitious workflows.
+Combine hooks and subagents to automate multi-step workflows.
+
+> [!NOTE]
+> Cursor now has a built-in **Multitask** mode that coordinates parallel background subagents. It postdates this material and automates some of the manual orchestration shown here.
 
 ### Orchestrator pattern
 
-The agent could suggest delegating to relevant subagents when they're defined. For complex tasks or when you have specific subagents, always good to be explicit about which ones to use:
+The agent can delegate to defined subagents when prompted. For complex tasks, specify which subagents to use:
 
 ```text
 > "Refactor the auth module. Use subagents: /implementer for code changes and /verifier to confirm each change works."
 ```
 
-The parent stays focused on coordination while subagents handle the work in isolated contexts.
+The parent agent coordinates while subagents do the work in isolated contexts.
 
 > [!NOTE]
-> Without git worktrees, parallel agents share the same working directory. Operations like git reset from one agent can undo another agent's changes. For true isolation, use worktrees (select from the agent dropdown). Each agent works on its own branch, then you merge the results.
+> Without git worktrees, parallel agents share the same working directory, so a `git reset` from one can undo another's changes. Worktrees give each agent its own branch and directory (select from the agent dropdown); you merge the results afterward.
+> Worktrees do not isolate the environment. For that (separate filesystem, processes, and network), run each agent in its own container or VM (for example, a dev container, or a remote machine over SSH).
 
 ---
 
