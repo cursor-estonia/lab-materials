@@ -331,7 +331,7 @@ Create security-focused rules in `.cursor/rules/security.md`:
 
 Use this checklist before working on sensitive projects:
 
-### Initial setup
+**Initial setup:**
 
 - [ ] `.cursorignore` includes all sensitive files
 - [ ] `.cursorindexingignore` excludes large/irrelevant directories
@@ -339,21 +339,21 @@ Use this checklist before working on sensitive projects:
 - [ ] **Run Everything (Unsandboxed)** is not enabled outside isolated environments
 - [ ] `.env` files are git-ignored
 
-### Before accepting AI changes
+**Before accepting AI changes:**
 
 - [ ] Review generated code for hardcoded secrets
 - [ ] Check that environment variables are used correctly
 - [ ] Verify no sensitive data in comments or logs
 - [ ] Confirm changes don't expose internal APIs
 
-### Before approving commands
+**Before approving commands:**
 
 - [ ] Understand what the command does
 - [ ] Check for network requests to unknown hosts
 - [ ] Verify no sudo/admin commands
 - [ ] Confirm scope is limited to project directory
 
-### When cloning repositories
+**When cloning repositories:**
 
 - [ ] Review README and scripts before opening
 - [ ] Check `package.json` scripts for suspicious commands
@@ -371,25 +371,15 @@ Use this checklist before working on sensitive projects:
 | `.cursor/rules/*.md`    | Project-specific agent behavior rules |
 | `.gitignore`            | Files excluded from version control   |
 
-### Security settings location
-
-See [Setup fundamentals > Auto-run modes][setup-fundamentals] for command execution and sandbox configuration.
-
 ### Documentation
 
 - [Cursor Agent Security][cursor-security]
 - [Cursor Rules][cursor-rules]
-
-### Vulnerability resources
-
 - [OWASP AI Exchange][owasp-ai]
+- [Cursor Security Advisories][cursor-advisories]
 
-### Reporting security issues
-
-If you discover a security vulnerability in Cursor:
-
-- Report via [Cursor Security Advisories][cursor-advisories]
-- Do not disclose publicly until patched
+> [!NOTE]
+> See [Setup fundamentals > Auto-run modes][setup-fundamentals] for command execution and sandbox configuration. Report security vulnerabilities via [Cursor Security Advisories][cursor-advisories]; do not disclose publicly until patched.
 
 <!-- Link definitions -->
 
