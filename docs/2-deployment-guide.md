@@ -89,8 +89,6 @@ You get a URL like: `https://your-project.vercel.app`
 > [!NOTE]
 > Check your deployment visibility in Project Settings > Deployment Protection. Vercel Authentication restricts access to team members only. See [Deployment Protection docs](https://vercel.com/docs/deployment-protection).
 
-Vercel provides a unique preview URL for every branch and pull request.
-
 ### Automatic deployments
 
 | Action               | Result                                    |
@@ -110,7 +108,7 @@ Vercel provides a unique preview URL for every branch and pull request.
 
 **Environment variables** are configuration values stored outside your code. They hold sensitive data like API keys, database URLs, and secrets. Never commit them to Git.
 
-### Via Dashboard
+### Via dashboard
 
 1. Go to Project > Settings > Environment Variables
 2. Add name + value

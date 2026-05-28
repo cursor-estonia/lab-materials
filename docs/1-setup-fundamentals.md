@@ -71,7 +71,7 @@ Connecting your GitHub account lets you push code to repositories and collaborat
 2. Type "GitHub: Sign in" and press Enter
 3. Authorize Cursor in the browser popup
 
-Once signed in, you can ask the Agent to commit and push changes for you. It writes descriptive commit messages automatically. You can also use the **Source Control** tab in the left sidebar for manual control.
+Once signed in, you can ask the agent to commit and push changes for you. It writes descriptive commit messages automatically. You can also use the **Source Control** tab in the left sidebar for manual control.
 
 **Docs:** [Cursor GitHub Integration][cursor-github]
 
@@ -174,7 +174,7 @@ Three layers govern agent network access: **Fetch Domain Allowlist** in Cursor S
 The **terminal** is an application for executing text commands instead of using a graphical interface. The **shell** is the program that interprets your commands (bash, zsh, etc.). On macOS, use the built-in **Terminal** app. On Windows, use **Git Bash** (installed with Git).
 
 > [!NOTE]
-> You can use Cursor without knowing terminal commands. The Agent can run commands for you, and the Git tab in the left sidebar handles git visually. Learn these commands when you want more control.
+> You can use Cursor without knowing terminal commands. The agent can run commands for you, and the Git tab in the left sidebar handles git visually. Learn these commands when you want more control.
 
 **Commands:**
 
@@ -272,7 +272,7 @@ git config --global user.email "your@email.com"
 
 ### Inspecting agent changes
 
-When the Agent makes changes, use these commands to see what happened:
+When the agent makes changes, use these commands to see what happened:
 
 ```bash
 git status                    # Show what files changed

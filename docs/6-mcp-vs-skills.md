@@ -1,11 +1,11 @@
-# MCP vs Skills
+# MCP vs skills
 
 ## Table of Contents
 
 <!-- toc -->
 
 - [1. Overview](#1-overview)
-- [2. Create a Skill with `/create-skill`](#2-create-a-skill-with-create-skill)
+- [2. Create a skill with `/create-skill`](#2-create-a-skill-with-create-skill)
 - [3. Configure a Git provider MCP in your project](#3-configure-a-git-provider-mcp-in-your-project)
 - [4. Workflow tips](#4-workflow-tips)
 - [5. Troubleshooting](#5-troubleshooting)
@@ -49,7 +49,7 @@ This guide creates a skill for reviewing code against static rules, then configu
 
 ---
 
-## 2. Create a Skill with `/create-skill`
+## 2. Create a skill with `/create-skill`
 
 ### What gets created
 
@@ -128,7 +128,7 @@ This example creates a skill for reviewing code style based on static rules (Tal
 
 ## 3. Configure a Git provider MCP in your project
 
-This section combines **general MCP configuration** with concrete setups for **GitLab** (GitLab.com or self-hosted) and **GitHub**.
+This section combines general MCP configuration with concrete setups for GitLab (GitLab.com or self-hosted) and GitHub.
 
 Configure MCPs per project. Each project may need different servers, and unused servers add token overhead.
 
@@ -357,7 +357,7 @@ For common operations (listing PRs, checking CI) the agent can use `gh` or `glab
 
 ## 6. Reference
 
-### Cursor docs
+### Documentation
 
 - [Skills][skills-docs]
 - [MCP][mcp-docs]

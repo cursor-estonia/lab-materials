@@ -1,4 +1,4 @@
-# Subagents and Hooks
+# Subagents and hooks
 
 ## Table of Contents
 
@@ -339,6 +339,8 @@ The parent agent coordinates while subagents do the work in isolated contexts.
 ---
 
 ## 5. Reference
+
+### Documentation
 
 - [Cursor Changelog][changelog-docs]
 - [Cursor 2.4 release notes (subagents introduction)][changelog-2-4-docs]
