@@ -1,4 +1,4 @@
-# Agent Security Guide
+# Agent security guide
 
 ## Table of Contents
 

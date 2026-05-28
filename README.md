@@ -12,8 +12,10 @@ Hands-on guides from setup to advanced workflows. Go in order or jump to what yo
   Context limits, infinite loops, and recovery strategies
 - [4. Agent security guide](docs/4-agent-security-guide.md)\
   Security vulnerabilities, prompt injection, and hardening practices
-- [5. Subagents and hooks](docs/5-subagents-and-hooks.md)\
+- [5. Subagents and Hooks](docs/5-subagents-and-hooks.md)\
   Custom subagents, hooks, and scaling patterns
+- [6. MCP vs Skills](docs/6-mcp-vs-skills.md)\
+  Skills, MCP servers, and Git provider setup for GitHub and GitLab
 
 ## Contributing
 

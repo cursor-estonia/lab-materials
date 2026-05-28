@@ -1,4 +1,4 @@
-# Scaling development with hooks and subagents
+# Subagents and Hooks
 
 ## Table of Contents
 
