@@ -24,20 +24,16 @@ Cursor agents can be extended in two complementary ways:
 | **Skill** | A markdown playbook (`SKILL.md`) | Workflow, conventions, and step-by-step instructions |
 | **MCP** | A Model Context Protocol server | Typed tools and resources (API calls, live data, actions) |
 
-**Skills teach the agent how to work.**  
-**MCP gives the agent new powers.**
+Skills and MCP servers work well together: a skill defines a repeatable workflow, while an MCP server exposes external tools (APIs, queries, actions) that the agent can call to carry out the work.
 
-They work well together: a Skill can define a repeatable workflow, while a Git provider MCP performs the actual issue/MR/pipeline operations.
+MCP queries tend to use more tokens than a skill invocation. A skill that wraps a CLI tool can be more token-efficient but may lack agent-specific functionality.
+For example, GitHub's MCP server and the `gh` CLI (or GitLab's MCP and `glab`) both manage issues and pull requests. The right choice depends on your workflow.
 
-MCP may however use more tokens than a skill, since a MCP query is usually more verbose. Sometimes you can create a skill for a CLI tool which may be token effective than a MCP server, but may lack some functionality specific for agents. Really depends on the tool and use case.
-
-Like for instance we could use the Github's/Gitlab's own MCP server to access issues or we could also create a skill for using the Github CLI tool `gh` (or Gitlab's `glab`) which can also query and manage issues.
-
-If you're interested more about the technical side of MCPs, you can read the official [documentation](https://modelcontextprotocol.io/docs/getting-started/intro). Think of it as an API for the agent to use.
+For more on the technical side of MCP, see the [MCP introduction][mcp-intro].
 
 ```mermaid
 flowchart LR
-    User[You in Cursor CLI]
+    User[You in Cursor]
     Agent[Agent]
     Skill[Skill SKILL.md]
     MCP[Git MCP server]
@@ -49,7 +45,7 @@ flowchart LR
     MCP --> GitHost
 ```
 
-This guide focuses on first creating a skill for reviewing code based on some static rules (something that is repetitive and great for an agent to do). Then we will configure a git MCP server for querying more information about project management like issues and merge requests.
+This guide creates a skill for reviewing code against static rules, then configures a Git provider MCP server for querying issues, merge requests, and pipelines.
 
 ---
 
@@ -92,7 +88,7 @@ Let's create an example skill for reviewing code style based on some static rule
    .cursor/skills/code-review-basics/SKILL.md
    ```
 
-5. Review and refine `SKILL.md` to your liking so it is actionable. Minimal example:
+5. Review and refine `SKILL.md` so it is actionable. Minimal example:
 
    ```markdown
    ---
@@ -132,7 +128,7 @@ Let's create an example skill for reviewing code style based on some static rule
 
 This section combines **general MCP configuration** with concrete setups for **GitLab** (GitLab.com or self-hosted) and **GitHub**.
 
-It's recommended to configure MCPs in the project, as each project may require different MCP servers or you will have unneccessary token wasting or lookups if you don't require it in another project.
+Configure MCPs per project. Each project may need different servers, and unused servers add unnecessary token overhead.
 
 ### 3.1 Create the project config file
 
@@ -165,17 +161,17 @@ Do not commit tokens in `mcp.json`.
 - **GitLab (community):** store a PAT in `.env` and load it with `envFile`.
 - **GitHub:** store a PAT in your shell environment and reference it with `${env:...}` in `headers` (remote servers do not support `envFile`).
 
-Add `.env` to `.gitignore` when you use PAT-based setups loaded from files.
+Add `.env` to `.gitignore` when you use PAT-based setups loaded from files. Also add it to `.cursorignore` so the agent cannot read your tokens (see [Agent security guide](4-agent-security-guide.md)).
 
 - [Jump to GitLab MCP setup](#34-gitlab-mcp-gitlabcom-or-self-hosted)
-- [Jump to GitHub MCP setup](#36-github-mcp)
+- [Jump to GitHub MCP setup](#35-github-mcp)
 
 ### 3.4 GitLab MCP (GitLab.com or self-hosted)
 
-There are two options for GitLab: official and community. Official is recommended for Gitlab Premium/Ultimate users.
+There are two options for GitLab: official and community. Official is recommended for GitLab Premium/Ultimate users.
 
-- [Official GitLab MCP (requires Gitlab Premium/Ultimate)](#341-official-gitlab-mcp-recommended)
-- [Community stdio MCP (for Gitlab Community Edition and self-hosted)](#342-community-mcp-server-pat-based-alternative)
+- [Official GitLab MCP (requires GitLab Premium/Ultimate)](#341-official-gitlab-mcp-recommended)
+- [Community stdio MCP (for GitLab Community Edition and self-hosted)](#342-community-mcp-server-pat-based-alternative)
 
 #### 3.4.1 Official GitLab MCP (recommended)
 
@@ -185,7 +181,7 @@ GitLab ships a built-in MCP endpoint at:
 
 Cursor connects over HTTP and authenticates with OAuth (no PAT in `mcp.json`).
 
-Cursor has an official Gitlab plugin as well which has some additional features but for the sake of this guide, we will show how to configure it manually. The flow is similar to all other MCP servers.
+Cursor also has an official GitLab plugin with additional features. This guide shows the manual configuration, which follows the same flow as any other MCP server.
 
 **Prerequisites (from GitLab docs):**
 
@@ -223,7 +219,7 @@ For GitLab.com, use `https://gitlab.com/api/v4/mcp`.
 
 #### 3.4.2 Community MCP server (PAT-based alternative)
 
-If your instance does not expose the official endpoint (Gitlab Community Edition), a common community option is [`zereight/gitlab-mcp`](https://github.com/zereight/gitlab-mcp) (`@zereight/mcp-gitlab` on npm).
+If your instance does not expose the official endpoint (GitLab Community Edition), a common community option is [`zereight/gitlab-mcp`][zereight-gitlab-mcp] (`@zereight/mcp-gitlab` on npm).
 
 GitLab `.env` example:
 
@@ -256,7 +252,7 @@ What the fields mean:
 | ----- | ------- |
 | `command` | Executable to start the MCP server (`npx`, `node`, `python`, `docker`, etc.) |
 | `args` | Arguments passed to the command |
-| `env` | Environment variables for the server (we're using envFile for this) |
+| `env` | Inline environment variables (alternative to `envFile`) |
 | `envFile` | Load secrets from a file (recommended for tokens) |
 
 #### Verify community GitLab MCP is loaded
@@ -271,7 +267,7 @@ What the fields mean:
 
 ---
 
-### 3.6 GitHub MCP
+### 3.5 GitHub MCP
 
 #### Prerequisites
 
@@ -309,7 +305,7 @@ What the fields mean:
 > [!NOTE]
 > GitHub's remote server currently expects a PAT in headers (not OAuth). Cursor remote MCP entries also do not support `envFile`; use `${env:...}` instead.
 
-### 3.7 Verify GitHub MCP is loaded
+### 3.6 Verify GitHub MCP is loaded
 
 1. Restart Cursor after saving `mcp.json`.
 2. Open **Settings > Tools & MCP**.
@@ -326,9 +322,7 @@ What the fields mean:
 
 ## 4. Workflow tips
 
-Now you can use these tools in your prompts to query issues, merge requests and pipelines using the git MCP server or have the agent perform a code review using a skill.
-
-Use your new Skill + Git MCP for repeatable studio workflows:
+Combine skills and MCP servers for repeatable project workflows:
 
 | Workflow | Skill responsibility | MCP responsibility |
 | -------- | -------------------- | ------------------ |
@@ -337,7 +331,7 @@ Use your new Skill + Git MCP for repeatable studio workflows:
 | Release candidate | Changelog + approval checklist | List tags/releases, verify green pipelines |
 | Hotfix | Fast-track process and owners | Create hotfix branch/MR, monitor CI |
 
-Also try to make a skill for using the git provider's CLI tools like `gh` or `glab` and see which one is the better fit for your project.
+For common operations (listing PRs, checking CI) the agent can use `gh` or `glab` directly in the shell without MCP setup. Skills add value for multi-step workflows: define the steps once in a skill instead of re-prompting every time, and share it with your team so everyone follows the same process.
 
 ---
 
@@ -363,6 +357,10 @@ Also try to make a skill for using the git provider's CLI tools like `gh` or `gl
 
 - [Skills][skills-docs]
 - [MCP][mcp-docs]
+
+### Related guides
+
+- [Subagents and hooks](5-subagents-and-hooks.md)
 - [Agent security guide](4-agent-security-guide.md)
 
 ### Example MCP servers
@@ -374,6 +372,7 @@ Also try to make a skill for using the git provider's CLI tools like `gh` or `gl
 - [MCP servers catalog][mcp-servers]
 
 <!-- Link definitions -->
+[mcp-intro]: https://modelcontextprotocol.io/docs/getting-started/intro
 [mcp-docs]: https://cursor.com/docs/mcp
 [skills-docs]: https://cursor.com/docs/context/skills
 [github-mcp-server]: https://github.com/github/github-mcp-server
