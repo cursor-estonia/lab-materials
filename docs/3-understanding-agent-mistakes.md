@@ -1,4 +1,4 @@
-# Understanding Agent Mistakes
+# Understanding agent mistakes
 
 ## Table of Contents
 

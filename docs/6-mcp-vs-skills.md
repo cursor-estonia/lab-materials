@@ -1,4 +1,4 @@
-# MCP vs Skills in Cursor
+# MCP vs Skills
 
 ## Table of Contents
 
