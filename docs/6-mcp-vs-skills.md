@@ -19,10 +19,10 @@
 
 Cursor agents can be extended in two complementary ways:
 
-| Capability | What it is | What it gives the agent |
-| ---------- | ---------- | ------------------------ |
-| **Skill** | A markdown playbook (`SKILL.md`) | Workflow, conventions, and step-by-step instructions |
-| **MCP** | A Model Context Protocol server | Typed tools and resources (API calls, live data, actions) |
+| Capability | What it is                       | What it gives the agent                                   |
+| ---------- | -------------------------------- | --------------------------------------------------------- |
+| **Skill**  | A markdown playbook (`SKILL.md`) | Workflow, conventions, and step-by-step instructions      |
+| **MCP**    | A Model Context Protocol server  | Typed tools and resources (API calls, live data, actions) |
 
 Skills and MCP servers work well together: a skill defines a repeatable workflow, while an MCP server exposes external tools the agent can call.
 
@@ -55,9 +55,9 @@ This guide creates a skill for reviewing code against static rules, then configu
 
 Running `/create-skill` scaffolds a skill folder with `SKILL.md` frontmatter (`name`, `description`) and starter instructions.
 
-| Location | Path | Scope |
-| -------- | ---- | ----- |
-| Project | `.cursor/skills/<skill-name>/SKILL.md` | Shared with the repo |
+| Location | Path                                     | Scope                     |
+| -------- | ---------------------------------------- | ------------------------- |
+| Project  | `.cursor/skills/<skill-name>/SKILL.md`   | Shared with the repo      |
 | Personal | `~/.cursor/skills/<skill-name>/SKILL.md` | Available in all projects |
 
 ### Create a code review skill
@@ -101,12 +101,14 @@ This example creates a skill for reviewing code style based on static rules (Tal
    # Code Review Basics
 
    ## Review focus
+
    1. Find duplicated logic and suggest shared abstractions (DRY)
    2. Flag unclear naming and suggest clearer alternatives
    3. Point out overly long functions and mixed responsibilities
    4. Check that code is easy to read and reason about
 
    ## Standards
+
    - Use TalTech clean code guidance as baseline:
      https://javadoc.pages.taltech.ee/code_style/clean-code.html
    - Prefer concrete findings with file-level references
@@ -146,10 +148,10 @@ your-project/
 
 ### 3.2 Config locations
 
-| Scope | File |
-| ----- | ---- |
-| Project | `.cursor/mcp.json` |
-| Global | `~/.cursor/mcp.json` |
+| Scope   | File                 |
+| ------- | -------------------- |
+| Project | `.cursor/mcp.json`   |
+| Global  | `~/.cursor/mcp.json` |
 
 Project config overrides global config for the same server name.
 
@@ -248,12 +250,12 @@ Add this to `.cursor/mcp.json`:
 
 What the fields mean:
 
-| Field | Purpose |
-| ----- | ------- |
+| Field     | Purpose                                                                      |
+| --------- | ---------------------------------------------------------------------------- |
 | `command` | Executable to start the MCP server (`npx`, `node`, `python`, `docker`, etc.) |
-| `args` | Arguments passed to the command |
-| `env` | Inline environment variables (alternative to `envFile`) |
-| `envFile` | Load secrets from a file (recommended for tokens) |
+| `args`    | Arguments passed to the command                                              |
+| `env`     | Inline environment variables (alternative to `envFile`)                      |
+| `envFile` | Load secrets from a file (recommended for tokens)                            |
 
 #### Verify community GitLab MCP is loaded
 
@@ -297,9 +299,9 @@ Add this server to `.cursor/mcp.json`:
 
 What the fields mean:
 
-| Field | Purpose |
-| ----- | ------- |
-| `url` | Remote MCP endpoint (HTTP / Streamable HTTP) |
+| Field     | Purpose                                                       |
+| --------- | ------------------------------------------------------------- |
+| `url`     | Remote MCP endpoint (HTTP / Streamable HTTP)                  |
 | `headers` | Auth and other request headers (use `${env:...}` for secrets) |
 
 > [!NOTE]
@@ -324,12 +326,12 @@ What the fields mean:
 
 Combine skills and MCP servers for repeatable project workflows:
 
-| Workflow | Skill responsibility | MCP responsibility |
-| -------- | -------------------- | ------------------ |
-| Feature branch | Naming, MR template, review rules | Create/list MRs, fetch diffs, comment |
-| Build validation | Define required jobs per platform | Read pipeline status and failed jobs |
-| Release candidate | Changelog + approval checklist | List tags/releases, verify green pipelines |
-| Hotfix | Fast-track process and owners | Create hotfix branch/MR, monitor CI |
+| Workflow          | Skill responsibility              | MCP responsibility                         |
+| ----------------- | --------------------------------- | ------------------------------------------ |
+| Feature branch    | Naming, MR template, review rules | Create/list MRs, fetch diffs, comment      |
+| Build validation  | Define required jobs per platform | Read pipeline status and failed jobs       |
+| Release candidate | Changelog + approval checklist    | List tags/releases, verify green pipelines |
+| Hotfix            | Fast-track process and owners     | Create hotfix branch/MR, monitor CI        |
 
 For common operations (listing PRs, checking CI) the agent can use `gh` or `glab` directly in the shell without MCP setup. Use skills for multi-step workflows: define the steps once and share them with the team instead of re-prompting each time.
 
@@ -337,17 +339,17 @@ For common operations (listing PRs, checking CI) the agent can use `gh` or `glab
 
 ## 5. Troubleshooting
 
-| Problem | What to check |
-| ------- | ------------- |
-| MCP server not listed | `.cursor/mcp.json` path, JSON validity, restart Tools & MCP |
-| Auth failures | Token value, scopes, expired token, wrong host URL |
+| Problem                          | What to check                                                                                           |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| MCP server not listed            | `.cursor/mcp.json` path, JSON validity, restart Tools & MCP                                             |
+| Auth failures                    | Token value, scopes, expired token, wrong host URL                                                      |
 | GitLab `/api/v4/mcp` returns 404 | Official MCP may be disabled on your tier/instance; use community stdio option or ask your GitLab admin |
-| Self-hosted GitLab TLS errors | Instance URL, cert trust settings, server-specific TLS env vars |
-| GitHub MCP fails to connect | Cursor v0.48.0+, `GITHUB_PERSONAL_ACCESS_TOKEN` exported in shell, PAT scopes valid |
-| GitHub Streamable HTTP errors | Update Cursor, verify URL is `https://api.githubcopilot.com/mcp/`, check proxy/firewall |
-| Skill not in `/` menu | Skill path is `.cursor/skills/<name>/SKILL.md`; invoke explicitly with `/<name>` |
-| Agent ignores skill | Mention skill directly: `Follow /code-review-basics ...` |
-| `npx` fails on Windows | Use Cursor docs pattern: `command: "cmd"` with `args: ["/c", "npx", ...]` |
+| Self-hosted GitLab TLS errors    | Instance URL, cert trust settings, server-specific TLS env vars                                         |
+| GitHub MCP fails to connect      | Cursor v0.48.0+, `GITHUB_PERSONAL_ACCESS_TOKEN` exported in shell, PAT scopes valid                     |
+| GitHub Streamable HTTP errors    | Update Cursor, verify URL is `https://api.githubcopilot.com/mcp/`, check proxy/firewall                 |
+| Skill not in `/` menu            | Skill path is `.cursor/skills/<name>/SKILL.md`; invoke explicitly with `/<name>`                        |
+| Agent ignores skill              | Mention skill directly: `Follow /code-review-basics ...`                                                |
+| `npx` fails on Windows           | Use Cursor docs pattern: `command: "cmd"` with `args: ["/c", "npx", ...]`                               |
 
 ---
 
@@ -372,6 +374,7 @@ For common operations (listing PRs, checking CI) the agent can use `gh` or `glab
 - [MCP servers catalog][mcp-servers]
 
 <!-- Link definitions -->
+
 [mcp-intro]: https://modelcontextprotocol.io/docs/getting-started/intro
 [mcp-docs]: https://cursor.com/docs/mcp
 [skills-docs]: https://cursor.com/docs/context/skills

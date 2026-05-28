@@ -253,6 +253,7 @@ node_modules
 | `vercel dev`          | Run local dev server   |
 
 <!-- Link definitions -->
+
 [setup-fundamentals]: 1-setup-fundamentals.md
 [vercel]: https://vercel.com
 [netlify]: https://netlify.com

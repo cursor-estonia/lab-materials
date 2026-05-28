@@ -52,6 +52,7 @@ Context management is the most common source of agent failures. A full context w
 **Problem:** The agent loses track of its progress within a task, repeatedly searching for the same information or applying the same fix.
 
 **Symptoms:**
+
 - Repetitive output like "Let me search for..." followed by the same search
 - Agent re-asks questions you already answered
 - Same code changes applied multiple times
@@ -61,12 +62,12 @@ Context management is the most common source of agent failures. A full context w
 
 **Solutions:**
 
-| Action | How to do it |
-| ------ | ------------ |
-| Start fresh | Open a new chat session to reset context |
-| Break down tasks | Divide complex work into smaller, focused requests |
-| Monitor token usage | Watch for signs of context saturation |
-| Clear chat history | Use `Settings > Clear All Chats` periodically |
+| Action              | How to do it                                       |
+| ------------------- | -------------------------------------------------- |
+| Start fresh         | Open a new chat session to reset context           |
+| Break down tasks    | Divide complex work into smaller, focused requests |
+| Monitor token usage | Watch for signs of context saturation              |
+| Clear chat history  | Use `Settings > Clear All Chats` periodically      |
 
 > [!TIP]
 > If the agent enters a loop, don't try to fix it within the same session. Start a new chat with a clearer, more focused prompt.
@@ -76,6 +77,7 @@ Context management is the most common source of agent failures. A full context w
 **Problem:** The agent generates plausible but incorrect code: non-existent functions, wrong APIs, or code that ignores your project structure.
 
 **Symptoms:**
+
 - Code references functions or variables that don't exist
 - Suggestions that ignore runtime errors or logs you provided
 - Generic solutions that don't fit your specific framework or architecture
@@ -126,6 +128,7 @@ For git undo commands (`git reset`, `git restore`), see [Setup fundamentals > Un
 Agent code can compile and pass basic checks while hiding real defects.
 
 **Common issues:**
+
 - Removing essential null checks or error handling
 - Breaking existing functionality while adding new features
 - Ignoring project conventions and patterns
@@ -172,12 +175,12 @@ LLMs cannot self-verify their logic. Compensate by having the agent write tests 
 
 ### 5.1 Common workflow mistakes
 
-| Avoid | Do instead |
-| ----- | ---------- |
-| Accept suggestions blindly | Review every change critically |
+| Avoid                           | Do instead                                 |
+| ------------------------------- | ------------------------------------------ |
+| Accept suggestions blindly      | Review every change critically             |
 | Fix AI mistakes in same session | Rollback and re-prompt with better context |
-| One big request | Multiple small, focused requests |
-| Hope it works | Verify with tests and manual review |
+| One big request                 | Multiple small, focused requests           |
+| Hope it works                   | Verify with tests and manual review        |
 
 ### 5.2 Effective prompting strategies
 
@@ -237,14 +240,14 @@ For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 
 ## 6. Troubleshooting
 
-| Problem | Likely cause | Solution |
-| ------- | ------------ | -------- |
-| Agent repeats same action or fix | Context loss or failed edit | Start new session; confirm state with `git diff` |
-| Suggestions ignore my code | Insufficient context provided | Use `@file` to reference specific files |
-| Code references non-existent functions | Hallucination | Provide more explicit constraints and examples |
-| Agent removes important code | Unclear about what to preserve | Specify what should NOT change |
-| Performance is slow | Large context or heavy codebase | Reduce context, use `.cursorignore` |
-| Agent gets stuck on first prompt | Loop bug | Restart Cursor, report to community forum |
+| Problem                                | Likely cause                    | Solution                                         |
+| -------------------------------------- | ------------------------------- | ------------------------------------------------ |
+| Agent repeats same action or fix       | Context loss or failed edit     | Start new session; confirm state with `git diff` |
+| Suggestions ignore my code             | Insufficient context provided   | Use `@file` to reference specific files          |
+| Code references non-existent functions | Hallucination                   | Provide more explicit constraints and examples   |
+| Agent removes important code           | Unclear about what to preserve  | Specify what should NOT change                   |
+| Performance is slow                    | Large context or heavy codebase | Reduce context, use `.cursorignore`              |
+| Agent gets stuck on first prompt       | Loop bug                        | Restart Cursor, report to community forum        |
 
 ---
 
@@ -260,6 +263,7 @@ For Cursor settings, context symbols, and chat modes, see [Setup fundamentals][s
 - [Cursor Forum][cursor-forum]
 
 <!-- Link definitions -->
+
 [setup-fundamentals]: 1-setup-fundamentals.md
 [cursor-docs]: https://cursor.com/docs
 [cursor-rules]: https://cursor.com/docs/rules

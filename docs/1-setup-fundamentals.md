@@ -24,7 +24,7 @@ Cursor is an AI code editor. It uses large language models to help you generate,
 **Key features:**
 
 | Feature          | Description                                           | Shortcut           |
-| ---------------  | ----------------------------------------------------- | ------------------ |
+| ---------------- | ----------------------------------------------------- | ------------------ |
 | **Tab**          | Multi-line autocomplete that predicts your next edit  | `Tab`              |
 | **Inline Edit**  | Select code and describe changes                      | `Cmd+K` / `Ctrl+K` |
 | **Agent**        | Build features and make changes across multiple files | `Cmd+I` / `Ctrl+I` |
@@ -157,15 +157,15 @@ Three layers govern agent network access: **Fetch Domain Allowlist** in Cursor S
 
 #### Keyboard shortcuts
 
-| Action                                    | macOS                 | Windows                 |
-| ----------------------------------------- | --------------------- | ----------------------- |
-| Toggle left sidebar                       | `Cmd+B`               | `Ctrl+B`                |
-| Toggle Agent mode                         | `Cmd+I`               | `Ctrl+I`                |
-| Toggle Plan mode                          | `Cmd+P`               | `Ctrl+P`                |
-| Cycle agent modes                         | `Cmd+.`               | `Ctrl+.`                |
-| Cycle agent modes from chat input         | `Cmd+.`               | `Ctrl+.`                |
-| Cycle reasoning effort for selected model | `Cmd+Shift+/`         | `Ctrl+Shift+/`          |
-| Toggle Agent/Editor view                  | `Cmd+E`               | `Ctrl+E`                |
+| Action                                    | macOS         | Windows        |
+| ----------------------------------------- | ------------- | -------------- |
+| Toggle left sidebar                       | `Cmd+B`       | `Ctrl+B`       |
+| Toggle Agent mode                         | `Cmd+I`       | `Ctrl+I`       |
+| Toggle Plan mode                          | `Cmd+P`       | `Ctrl+P`       |
+| Cycle agent modes                         | `Cmd+.`       | `Ctrl+.`       |
+| Cycle agent modes from chat input         | `Cmd+.`       | `Ctrl+.`       |
+| Cycle reasoning effort for selected model | `Cmd+Shift+/` | `Ctrl+Shift+/` |
+| Toggle Agent/Editor view                  | `Cmd+E`       | `Ctrl+E`       |
 
 ---
 
@@ -212,8 +212,8 @@ A **package manager** is a tool that installs and updates software from the comm
 2. Restart your terminal
 3. Install git:
 
-| macOS | Windows |
-| ----- | ------- |
+| macOS                                                   | Windows             |
+| ------------------------------------------------------- | ------------------- |
 | Git comes pre-installed. Run `git --version` to verify. | `scoop install git` |
 
 > [!NOTE]
@@ -232,13 +232,13 @@ A **package manager** is a tool that installs and updates software from the comm
 
 ### Key concepts
 
-| Term                  | Meaning                                                             |
-| --------------------- | ------------------------------------------------------------------- |
-| **Repository**        | A folder tracked by Git that contains your project and its history  |
-| **Working directory** | Current state of files in your repository                           |
-| **Unstaged changes**  | Modified files not yet selected for commit                          |
-| **Staged changes**    | Changes selected to be included in the next commit                  |
-| **Commit**            | A saved snapshot of staged changes                                  |
+| Term                  | Meaning                                                            |
+| --------------------- | ------------------------------------------------------------------ |
+| **Repository**        | A folder tracked by Git that contains your project and its history |
+| **Working directory** | Current state of files in your repository                          |
+| **Unstaged changes**  | Modified files not yet selected for commit                         |
+| **Staged changes**    | Changes selected to be included in the next commit                 |
+| **Commit**            | A saved snapshot of staged changes                                 |
 
 > [!NOTE]
 > Git stores all version history and metadata in a hidden `.git/` folder inside your repository. You never need to edit this folder directly.
@@ -287,21 +287,21 @@ git show HEAD -- path/to/file # View the latest committed version of a file
 > [!WARNING]
 > These commands permanently delete uncommitted changes. Commit your work first if you want to keep it.
 
-| Command                          | Description                                          |
-| -------------------------------- | ---------------------------------------------------- |
-| `git restore .`                  | Discard unstaged changes only (keeps staged changes) |
-| `git checkout HEAD -- <file>`    | Restore a single file to its last committed state    |
-| `git reset --hard`               | Discard all changes (both staged and unstaged)       |
+| Command                       | Description                                          |
+| ----------------------------- | ---------------------------------------------------- |
+| `git restore .`               | Discard unstaged changes only (keeps staged changes) |
+| `git checkout HEAD -- <file>` | Restore a single file to its last committed state    |
+| `git reset --hard`            | Discard all changes (both staged and unstaged)       |
 
 **Undo commits:**
 
 > [!WARNING]
 > Recovery via `git reflog` is sometimes possible if the commit hasn't been garbage collected, but this isn't guaranteed. Use with caution.
 
-| Command                   | Description                            |
-| ------------------------- | -------------------------------------- |
-| `git reset --soft HEAD~1` | Undo last commit, keep changes staged  |
-| `git reset --hard HEAD~1` | Undo last commit, discard changes      |
+| Command                   | Description                           |
+| ------------------------- | ------------------------------------- |
+| `git reset --soft HEAD~1` | Undo last commit, keep changes staged |
+| `git reset --hard HEAD~1` | Undo last commit, discard changes     |
 
 ### Optional: Git GUI
 
@@ -344,6 +344,7 @@ A dedicated Git GUI makes it easier to browse many commits at once in a larger v
 - [GitHub][github-docs] - Platform documentation
 
 <!-- Link definitions -->
+
 [brew]: https://brew.sh
 [cursor-concepts]: https://cursor.com/docs/agent/overview
 [cursor-docs]: https://cursor.com/docs
