@@ -24,10 +24,10 @@ Cursor agents can be extended in two complementary ways:
 | **Skill** | A markdown playbook (`SKILL.md`) | Workflow, conventions, and step-by-step instructions |
 | **MCP** | A Model Context Protocol server | Typed tools and resources (API calls, live data, actions) |
 
-Skills and MCP servers work well together: a skill defines a repeatable workflow, while an MCP server exposes external tools (APIs, queries, actions) that the agent can call to carry out the work.
+Skills and MCP servers work well together: a skill defines a repeatable workflow, while an MCP server exposes external tools the agent can call.
 
-MCP queries tend to use more tokens than a skill invocation. A skill that wraps a CLI tool can be more token-efficient but may lack agent-specific functionality.
-For example, GitHub's MCP server and the `gh` CLI (or GitLab's MCP and `glab`) both manage issues and pull requests. The right choice depends on your workflow.
+MCP queries use more tokens than a skill invocation. A skill that wraps a CLI tool is more token-efficient but may lack features the MCP server provides.
+For example, GitHub's MCP server and the `gh` CLI (or GitLab's MCP and `glab`) both manage issues and pull requests.
 
 For more on the technical side of MCP, see the [MCP introduction][mcp-intro].
 
@@ -62,7 +62,7 @@ Running `/create-skill` scaffolds a skill folder with `SKILL.md` frontmatter (`n
 
 ### Create a code review skill
 
-Let's create an example skill for reviewing code style based on some static rules (taken from TalTech's general clean code rules in Estonian).
+This example creates a skill for reviewing code style based on static rules (TalTech clean code rules in Estonian).
 
 1. Open Cursor CLI (or Agent chat) in your project root.
 2. Run:
@@ -128,7 +128,7 @@ Let's create an example skill for reviewing code style based on some static rule
 
 This section combines **general MCP configuration** with concrete setups for **GitLab** (GitLab.com or self-hosted) and **GitHub**.
 
-Configure MCPs per project. Each project may need different servers, and unused servers add unnecessary token overhead.
+Configure MCPs per project. Each project may need different servers, and unused servers add token overhead.
 
 ### 3.1 Create the project config file
 
@@ -181,7 +181,7 @@ GitLab ships a built-in MCP endpoint at:
 
 Cursor connects over HTTP and authenticates with OAuth (no PAT in `mcp.json`).
 
-Cursor also has an official GitLab plugin with additional features. This guide shows the manual configuration, which follows the same flow as any other MCP server.
+Cursor also has a built-in GitLab integration (repository connection and Bugbot), which is separate from this MCP setup. This guide shows the manual MCP configuration.
 
 **Prerequisites (from GitLab docs):**
 
@@ -219,12 +219,12 @@ For GitLab.com, use `https://gitlab.com/api/v4/mcp`.
 
 #### 3.4.2 Community MCP server (PAT-based alternative)
 
-If your instance does not expose the official endpoint (GitLab Community Edition), a common community option is [`zereight/gitlab-mcp`][zereight-gitlab-mcp] (`@zereight/mcp-gitlab` on npm).
+If your instance does not expose the official endpoint (GitLab Community Edition), use [`zereight/gitlab-mcp`][zereight-gitlab-mcp] (`@zereight/mcp-gitlab` on npm).
 
 GitLab `.env` example:
 
 ```bash
-GITLAB_PERSONAL_ACCESS_TOKEN=glpat_...
+GITLAB_PERSONAL_ACCESS_TOKEN=glpat-...
 GITLAB_API_URL=https://gitlab.example.com/api/v4
 ```
 
@@ -331,7 +331,7 @@ Combine skills and MCP servers for repeatable project workflows:
 | Release candidate | Changelog + approval checklist | List tags/releases, verify green pipelines |
 | Hotfix | Fast-track process and owners | Create hotfix branch/MR, monitor CI |
 
-For common operations (listing PRs, checking CI) the agent can use `gh` or `glab` directly in the shell without MCP setup. Skills add value for multi-step workflows: define the steps once in a skill instead of re-prompting every time, and share it with your team so everyone follows the same process.
+For common operations (listing PRs, checking CI) the agent can use `gh` or `glab` directly in the shell without MCP setup. Use skills for multi-step workflows: define the steps once and share them with the team instead of re-prompting each time.
 
 ---
 
