@@ -161,9 +161,9 @@ Project config overrides global config for the same server name.
 
 Do not commit tokens in `mcp.json`.
 
-- **GitLab (official HTTP MCP):** uses OAuth in the browser; no PAT in `.env` required.
-- **GitLab (community stdio MCP):** store a PAT in `.env` and load it with `envFile`.
-- **GitHub (remote MCP):** store a PAT in your shell environment and reference it with `${env:...}` in `headers` (remote servers do not support `envFile`).
+- **GitLab (official):** uses OAuth in the browser; no PAT in `.env` required.
+- **GitLab (community):** store a PAT in `.env` and load it with `envFile`.
+- **GitHub:** store a PAT in your shell environment and reference it with `${env:...}` in `headers` (remote servers do not support `envFile`).
 
 Add `.env` to `.gitignore` when you use PAT-based setups loaded from files.
 
@@ -172,9 +172,7 @@ Add `.env` to `.gitignore` when you use PAT-based setups loaded from files.
 
 ### 3.4 GitLab MCP (GitLab.com or self-hosted)
 
-Pick one setup path below. Both are self-contained.
-
-Quick links inside this section:
+There are two options for GitLab: official and community. Official is recommended for Gitlab Premium/Ultimate users.
 
 - [Official GitLab MCP (requires Gitlab Premium/Ultimate)](#341-official-gitlab-mcp-recommended)
 - [Community stdio MCP (for Gitlab Community Edition and self-hosted)](#342-community-stdio-mcp-pat-based-alternative)
@@ -366,7 +364,6 @@ Also try to make a skill for using the git provider's CLI tools like `gh` or `gl
 - [Skills][skills-docs]
 - [MCP][mcp-docs]
 - [Agent security guide](4-agent-security-guide.md)
-- [TalTech clean code standard][taltech-clean-code]
 
 ### Example MCP servers
 
