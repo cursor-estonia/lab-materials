@@ -114,7 +114,7 @@ when the user object is null. Add null checking before accessing user.email."
 
 Commit working code before significant AI-assisted changes for instant rollback.
 
-For git undo commands (`git reset`, `git restore`), see [Setup fundamentals > Undo commands][setup-fundamentals].
+For git undo commands (`git reset`, `git restore`), see [Setup fundamentals > Undo commands][setup-undo].
 
 > [!TIP]
 > Commit after each successful AI-assisted change. Small, frequent commits make it easy to identify exactly where things went wrong.
@@ -265,6 +265,7 @@ For Cursor settings, context symbols, and chat modes, see [Setup fundamentals][s
 <!-- Link definitions -->
 
 [setup-fundamentals]: 1-setup-fundamentals.md
+[setup-undo]: 1-setup-fundamentals.md#undo-commands
 [cursor-docs]: https://cursor.com/docs
 [cursor-rules]: https://cursor.com/docs/rules
 [cursor-security]: https://cursor.com/docs/agent/security
