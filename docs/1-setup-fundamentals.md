@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-- [1. What is Cursor?](#1-what-is-cursor)
+- [1. Overview](#1-overview)
 - [2. Install Cursor](#2-install-cursor)
 - [3. Cursor setup](#3-cursor-setup)
 - [4. Terminal basics](#4-terminal-basics)
@@ -15,9 +15,7 @@
 
 <!-- tocstop -->
 
----
-
-## 1. What is Cursor?
+## 1. Overview
 
 Cursor is an AI code editor. It uses large language models to help you generate, edit, and understand code.
 
@@ -36,8 +34,6 @@ Cursor is an AI code editor. It uses large language models to help you generate,
 
 **Learn more:** [Cursor Concepts][cursor-concepts]
 
----
-
 ## 2. Install Cursor
 
 1. Download [Cursor][cursor-download] and run the installer
@@ -46,8 +42,6 @@ Cursor is an AI code editor. It uses large language models to help you generate,
 
 > [!NOTE]
 > 2FA is required for contributors and recommended for everyone.
-
----
 
 ## 3. Cursor setup
 
@@ -123,7 +117,7 @@ build/
 
 **Docs:** [Cursor Rules][cursor-rules]
 
-### Using the Agent
+### Using the agent
 
 #### Context symbols
 
@@ -167,8 +161,6 @@ Three layers govern agent network access: **Fetch Domain Allowlist** in Cursor S
 | Cycle reasoning effort for selected model | `Cmd+Shift+/` | `Ctrl+Shift+/` |
 | Toggle Agent/Editor view                  | `Cmd+E`       | `Ctrl+E`       |
 
----
-
 ## 4. Terminal basics
 
 The **terminal** is an application for executing text commands instead of using a graphical interface. The **shell** is the program that interprets your commands (bash, zsh, etc.). On macOS, use the built-in **Terminal** app. On Windows, use **Git Bash** (installed with Git).
@@ -197,8 +189,6 @@ The **terminal** is an application for executing text commands instead of using 
 | Up     | Previous command        |
 | Ctrl+C | Cancel current command  |
 
----
-
 ## 5. Package managers
 
 A **package manager** is a tool that installs and updates software from the command line. Instead of downloading installers from websites, you run a single command.
@@ -220,8 +210,6 @@ A **package manager** is a tool that installs and updates software from the comm
 > **macOS:** If git isn't available, running `git --version` will prompt macOS to install Xcode Command Line Tools automatically.
 >
 > **Windows:** Use **Git Bash** for terminal commands (installed with Git). WSL works too but adds complexity.
-
----
 
 ## 6. Git basics
 
@@ -313,8 +301,6 @@ A dedicated Git GUI makes it easier to browse many commits at once in a larger v
 
 **Docs:** [Git][git-docs]
 
----
-
 ## 7. Troubleshooting
 
 | Problem                     | Solution                                                      |
@@ -323,8 +309,6 @@ A dedicated Git GUI makes it easier to browse many commits at once in a larger v
 | GitHub authentication fails | Re-run "GitHub: Sign in" from command palette (`Cmd+Shift+P`) |
 | Agent can't see my files    | Verify `.cursorignore` is not excluding them                  |
 | New packages not working    | Run `npm install` manually after adding dependencies          |
-
----
 
 ## 8. Reference
 

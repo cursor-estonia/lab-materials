@@ -12,8 +12,6 @@
 
 <!-- tocstop -->
 
----
-
 ## 1. Overview
 
 **Subagents** and **hooks** extend Cursor's agent: subagents run tasks in parallel, hooks run scripts before or after agent actions.
@@ -25,8 +23,6 @@
 
 > [!NOTE]
 > Subagents were introduced in Cursor 2.4. Hooks have been available since earlier versions.
-
----
 
 ## 2. Subagents
 
@@ -89,8 +85,6 @@ Validates completed work before accepting it as done.
 > Write clear descriptions so the agent knows when to delegate.
 
 **Docs:** [Subagents][subagents-docs]
-
----
 
 ## 3. Hooks
 
@@ -313,8 +307,6 @@ Uses a `matcher` to block commands matching a pattern.
 
 **Docs:** [Hooks][hooks-docs]
 
----
-
 ## 4. Scaling patterns
 
 Combine hooks and subagents to automate multi-step workflows.
@@ -335,8 +327,6 @@ The parent agent coordinates while subagents do the work in isolated contexts.
 > [!NOTE]
 > Without git worktrees, parallel agents share the same working directory, so a `git reset` from one can undo another's changes. Worktrees give each agent its own branch and directory (select from the agent dropdown); you merge the results afterward.
 > Worktrees do not isolate the environment. For that (separate filesystem, processes, and network), run each agent in its own container or VM (for example, a dev container, or a remote machine over SSH).
-
----
 
 ## 5. Reference
 

@@ -15,8 +15,6 @@
 
 <!-- tocstop -->
 
----
-
 ## 1. Overview
 
 Deployment makes your code accessible on the internet via a URL.
@@ -50,8 +48,6 @@ flowchart LR
 | **Preview**               | A test version to check before going live             |
 | **Environment variables** | Secret configuration values (API keys, database URLs) |
 
----
-
 ## 2. Prerequisites
 
 1. Complete [Setup fundamentals][setup-fundamentals]
@@ -62,8 +58,6 @@ flowchart LR
 
 > [!TIP]
 > For managing multiple Node.js versions, install [n][n-version-manager] (macOS/Linux) or [nvm-windows][nvm-windows]. This lets you switch between versions easily.
-
----
 
 ## 3. Vercel deployment
 
@@ -101,8 +95,6 @@ You get a URL like: `https://your-project.vercel.app`
 > Use preview deployments to test changes before merging. Share the preview URL with teammates or clients for feedback.
 
 **Docs:** [Vercel][vercel-docs]
-
----
 
 ## 4. Environment variables
 
@@ -146,8 +138,6 @@ DATABASE_URL=postgres://...                   # Server-side only
 
 **Docs:** [Vercel CLI][vercel-cli]
 
----
-
 ## 5. Other platforms
 
 Other platforms serve different needs:
@@ -168,8 +158,6 @@ Other platforms serve different needs:
 | Next.js app                 | Vercel            |
 | Need a database             | Railway or Render |
 | No local setup              | Replit            |
-
----
 
 ## 6. Security basics
 
@@ -196,8 +184,6 @@ node_modules
 - [ ] No hardcoded API keys in source
 - [ ] HTTPS enabled (automatic on Vercel/Netlify)
 
----
-
 ## 7. Troubleshooting
 
 | Problem                          | Solution                                                 |
@@ -215,8 +201,6 @@ node_modules
   "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
 ```
-
----
 
 ## 8. Reference
 

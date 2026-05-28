@@ -14,8 +14,6 @@
 
 <!-- tocstop -->
 
----
-
 ## 1. Overview
 
 AI coding agents fail in specific ways: context loss, hallucination, and subtle bugs. This guide covers each and how to recover.
@@ -41,13 +39,11 @@ flowchart TB
 
 Treat AI-generated code as **a draft**. You provide the judgment and verification the agent cannot.
 
----
-
 ## 2. Context management issues
 
 Context management is the most common source of agent failures. A full context window leads to forgetting, repetition, and hallucination.
 
-### 2.1 Context loss and infinite loops
+### Context loss and infinite loops
 
 **Problem:** The agent loses track of its progress within a task, repeatedly searching for the same information or applying the same fix.
 
@@ -72,7 +68,7 @@ Context management is the most common source of agent failures. A full context w
 > [!TIP]
 > If the agent enters a loop, don't try to fix it within the same session. Start a new chat with a clearer, more focused prompt.
 
-### 2.2 Hallucination and irrelevant suggestions
+### Hallucination and irrelevant suggestions
 
 **Problem:** The agent generates plausible but incorrect code: non-existent functions, wrong APIs, or code that ignores your project structure.
 
@@ -98,7 +94,7 @@ Context management is the most common source of agent failures. A full context w
 when the user object is null. Add null checking before accessing user.email."
 ```
 
-### 2.3 Lost in the middle
+### Lost in the middle
 
 **Problem:** When context becomes very long, agents focus on information at the beginning and end and lose details in the middle.
 
@@ -107,8 +103,6 @@ when the user object is null. Add null checking before accessing user.email."
 - Keep critical information near the start or end of your prompt
 - For long tasks, summarize key constraints at the end
 - Reference important files directly rather than relying on earlier mentions
-
----
 
 ## 3. Version control
 
@@ -119,11 +113,9 @@ For git undo commands (`git reset`, `git restore`), see [Setup fundamentals > Un
 > [!TIP]
 > Commit after each successful AI-assisted change. Small, frequent commits make it easy to identify exactly where things went wrong.
 
----
-
 ## 4. Code quality issues
 
-### 4.1 Subtle bugs and broken conventions
+### Subtle bugs and broken conventions
 
 Agent code can compile and pass basic checks while hiding real defects.
 
@@ -150,7 +142,7 @@ Agent code can compile and pass basic checks while hiding real defects.
 and don't modify other functions."
 ```
 
-### 4.2 Enforcing validation with tests
+### Enforcing validation with tests
 
 LLMs cannot self-verify their logic. Compensate by having the agent write tests alongside implementation.
 
@@ -169,11 +161,9 @@ LLMs cannot self-verify their logic. Compensate by having the agent write tests 
 > [!NOTE]
 > Tests written by AI need the same review as any other code.
 
----
-
 ## 5. Workflow best practices
 
-### 5.1 Common workflow mistakes
+### Common workflow mistakes
 
 | Avoid                           | Do instead                                 |
 | ------------------------------- | ------------------------------------------ |
@@ -182,7 +172,7 @@ LLMs cannot self-verify their logic. Compensate by having the agent write tests 
 | One big request                 | Multiple small, focused requests           |
 | Hope it works                   | Verify with tests and manual review        |
 
-### 5.2 Effective prompting strategies
+### Effective prompting strategies
 
 **Structure your prompts:**
 
@@ -209,7 +199,7 @@ Success criteria:
 - No layout shift when transitioning states
 ```
 
-### 5.3 When to stop and restart
+### When to stop and restart
 
 Signs the session needs a restart:
 
@@ -225,7 +215,7 @@ Signs the session needs a restart:
 3. Rollback problematic changes: `git restore .`
 4. Start a fresh chat with lessons learned incorporated into the prompt
 
-### 5.4 Use Plan Mode for complex tasks
+### Use Plan Mode for complex tasks
 
 For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 
@@ -235,8 +225,6 @@ For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 
 > [!TIP]
 > Plan Mode is useful when you're unsure about the approach. Let the agent propose a plan, refine it together, then execute.
-
----
 
 ## 6. Troubleshooting
 
@@ -248,8 +236,6 @@ For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 | Agent removes important code           | Unclear about what to preserve  | Specify what should NOT change                   |
 | Performance is slow                    | Large context or heavy codebase | Reduce context, use `.cursorignore`              |
 | Agent gets stuck on first prompt       | Loop bug                        | Restart Cursor, report to community forum        |
-
----
 
 ## 7. Reference
 
