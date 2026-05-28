@@ -1,0 +1,2 @@
+.mise/tasks/* linguist-vendored
+*.md linguist-detectable linguist-documentation=false

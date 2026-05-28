@@ -1,5 +1,5 @@
 [tools]
 node = "latest"
-pre-commit = "latest"
+lefthook = "latest"
 "npm:markdownlint-cli2" = "latest"
 "npm:markdown-toc" = "latest"

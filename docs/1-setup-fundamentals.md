@@ -128,7 +128,7 @@ build/
 
 Use `@` symbols in prompts to give the agent more context:
 
-- `@files` - browse files or folders
+- `@file` - browse files or folders
 - `@<filename>` - include specific file/folder
 - `@docs` - include external documentation
 - `@git` - reference git changes and diffs
@@ -140,28 +140,31 @@ Use `@` symbols in prompts to give the agent more context:
 
 #### Auto-run modes
 
-Go to **Settings > Features > Agent** and configure:
+Go to **Cursor Settings > Agents** and configure **Auto-Run Mode**:
 
-| Setting           | Options                                               | Recommended        |
-| ----------------- | ----------------------------------------------------- | ------------------ |
-| Command execution | Ask Every Time / Auto-Run in Sandbox / Run Everything | **Ask Every Time** |
-
-- **Ask Every Time** - You approve each command before it runs (safest)
-- **Auto-Run in Sandbox** - Commands run automatically in a sandbox if possible with restricted network and filesystem access. Otherwise fallback to allowlist.
-- **Run Everything (Unsandboxed)** - All commands run automatically without prompts
+| Option                           | Behavior                                                                                                                         |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Allowlist**                    | Tools run automatically only when they match your allowlist. Everything else asks for approval.                                  |
+| **Allowlist (with Sandbox)**     | Tools auto-run in a sandbox when possible. If sandbox is unavailable, falls back to your allowlist or asks. Recommended default. |
+| **Auto (with Sandbox)**          | Tools auto-run in a sandbox by default, with fewer prompts.                                                                      |
+| **Run Everything (Unsandboxed)** | Only recommended in isolated environments (e.g. VMs or containers).                                                              |
 
 > [!NOTE]
 > The sandbox allows reads and writes within your workspace but blocks network access and git operations by default. You'll still be asked to approve operations that need additional permissions.
 
+Three layers govern agent network access: **Fetch Domain Allowlist** in Cursor Settings (local IDE, user-scoped), `.cursor/sandbox.json` at the repo root (committed, authoritative for sandboxed + cloud agents), and a per-user cloud-agent global allowlist.
+
 #### Keyboard shortcuts
 
-| Action                   | macOS   | Windows  |
-| ------------------------ | ------- | -------- |
-| Toggle left sidebar      | `Cmd+B` | `Ctrl+B` |
-| Open Agent mode          | `Cmd+I` | `Ctrl+I` |
-| Open Plan mode           | `Cmd+P` | `Ctrl+P` |
-| Switch modes             | `Cmd+.` | `Ctrl+.` |
-| Toggle Agent/Editor view | `Cmd+E` | `Ctrl+E` |
+| Action                                    | macOS                 | Windows                 |
+| ----------------------------------------- | --------------------- | ----------------------- |
+| Toggle left sidebar                       | `Cmd+B`               | `Ctrl+B`                |
+| Toggle Agent mode                         | `Cmd+I`               | `Ctrl+I`                |
+| Toggle Plan mode                          | `Cmd+P`               | `Ctrl+P`                |
+| Cycle agent modes                         | `Cmd+.`               | `Ctrl+.`                |
+| Cycle agent modes from chat input         | `Cmd+.`               | `Ctrl+.`                |
+| Cycle reasoning effort for selected model | `Cmd+Shift+/`         | `Ctrl+Shift+/`          |
+| Toggle Agent/Editor view                  | `Cmd+E`               | `Ctrl+E`                |
 
 ---
 
@@ -341,11 +344,11 @@ A dedicated Git GUI makes it easier to browse many commits at once in a larger v
 
 <!-- Link definitions -->
 [brew]: https://brew.sh
-[cursor-concepts]: https://cursor.com/docs/get-started/concepts
+[cursor-concepts]: https://cursor.com/docs/agent/overview
 [cursor-docs]: https://cursor.com/docs
 [cursor-download]: https://cursor.com
 [cursor-github]: https://cursor.com/docs/integrations/github
-[cursor-rules]: https://cursor.com/docs/context/rules
+[cursor-rules]: https://cursor.com/docs/rules
 [git-docs]: https://git-scm.com/doc
 [github-docs]: https://docs.github.com
 [github-signup]: https://github.com/signup

@@ -24,7 +24,7 @@
 | **Hooks** | Scripts that run before or after agent actions to observe, block, or modify behavior |
 
 > [!NOTE]
-> Subagents are new in Cursor 2.4. Hooks have been available since earlier versions.
+> Subagents were introduced in Cursor 2.4. Hooks have been available since earlier versions.
 
 ---
 
@@ -206,6 +206,8 @@ Combines subagents (avoiding context pollution) with a hook that triggers contin
     }
     ```
 
+    The iteration cap is enforced by the hook script itself via `MAX_ITERATIONS` below, using the `loop_count` field Cursor passes in on stdin.
+
 4. **Create the hook script:** In `.cursor/hooks/`, create `check-tasks.ts`:
 
     ```typescript
@@ -335,7 +337,8 @@ The parent stays focused on coordination while subagents handle the work in isol
 
 ## 5. Reference
 
-- [Cursor 2.4 Changelog][changelog-docs]
+- [Cursor Changelog][changelog-docs]
+- [Cursor 2.4 release notes (subagents introduction)][changelog-2-4-docs]
 - [Hooks Documentation][hooks-docs]
 - [Subagents Documentation][subagents-docs]
 - [Skills Documentation][skills-docs]
@@ -343,9 +346,10 @@ The parent stays focused on coordination while subagents handle the work in isol
 - [Ralph Wiggum Cursor][ralph-repo]
 
 <!-- Link definitions -->
-[changelog-docs]: https://cursor.com/changelog/2-4
-[hooks-docs]: https://cursor.com/docs/agent/hooks
-[subagents-docs]: https://cursor.com/docs/context/subagents
-[skills-docs]: https://cursor.com/docs/context/skills
+[changelog-docs]: https://cursor.com/changelog
+[changelog-2-4-docs]: https://cursor.com/changelog/2-4
+[hooks-docs]: https://cursor.com/docs/hooks
+[subagents-docs]: https://cursor.com/docs/subagents
+[skills-docs]: https://cursor.com/docs/skills
 [best-practices-docs]: https://cursor.com/blog/agent-best-practices
 [ralph-repo]: https://github.com/agrimsingh/ralph-wiggum-cursor

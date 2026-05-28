@@ -283,7 +283,7 @@ For Cursor settings, context symbols, and chat modes, see [Setup fundamentals][s
 
 <!-- Link definitions -->
 [setup-fundamentals]: 1-setup-fundamentals.md
-[cursor-docs]: https://docs.cursor.com
-[cursor-rules]: https://docs.cursor.com/context/rules
-[cursor-security]: https://docs.cursor.com/account/agent-security
+[cursor-docs]: https://cursor.com/docs
+[cursor-rules]: https://cursor.com/docs/rules
+[cursor-security]: https://cursor.com/docs/agent/security
 [cursor-forum]: https://forum.cursor.com
