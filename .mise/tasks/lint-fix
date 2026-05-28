@@ -9,3 +9,5 @@ while read -r f; do
     markdown-toc -i --maxdepth 2 --bullets "-" "$f"
   fi
 done < <(find . -name '*.md')
+
+prettier --write "**/*.md"

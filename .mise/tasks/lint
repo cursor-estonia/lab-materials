@@ -4,6 +4,8 @@ set -euo pipefail
 
 markdownlint-cli2 "**/*.md"
 
+prettier --check "**/*.md"
+
 fail=0
 while read -r f; do
   if ! grep -q '<!-- toc -->' "$f"; then

@@ -6,7 +6,7 @@
 
 - [1. Overview](#1-overview)
 - [2. Context management issues](#2-context-management-issues)
-- [3. File synchronization problems](#3-file-synchronization-problems)
+- [3. Version control](#3-version-control)
 - [4. Code quality issues](#4-code-quality-issues)
 - [5. Workflow best practices](#5-workflow-best-practices)
 - [6. Troubleshooting](#6-troubleshooting)
@@ -18,20 +18,20 @@
 
 ## 1. Overview
 
-AI coding agents accelerate development but introduce new failure modes. Understanding these patterns transforms you from a passive user into an effective **Agent Orchestrator**, someone who guides, validates, and corrects AI outputs strategically.
+AI coding agents fail in specific ways: context loss, hallucination, and subtle bugs. This guide covers each and how to recover.
 
 ```mermaid
 flowchart TB
-    subgraph FAILURES["Common Failure Types"]
-        A[Context Loss] --> D[Infinite Loops]
-        B[File Sync Issues] --> D
-        C[Hallucination] --> E[Wrong Code]
+    subgraph FAILURES["Common failure types"]
+        A[Context loss] --> D[Infinite loops]
+        B[Failed edit] --> D
+        C[Hallucination] --> E[Wrong code]
     end
 
-    subgraph MITIGATIONS["Mitigation Strategies"]
-        F[Clear Context] --> I[Reliable Output]
-        G[Save Immediately] --> I
-        H[Review & Test] --> I
+    subgraph MITIGATIONS["Mitigation strategies"]
+        F[Clear context] --> I[Reliable output]
+        G[Commit and verify] --> I
+        H[Review & test] --> I
     end
 
     FAILURES --> MITIGATIONS
@@ -39,40 +39,45 @@ flowchart TB
 
 ### Key principle
 
-Treat AI-generated code as **tentative suggestions from a capable but fallible assistant**. The agent excels at speed and pattern recognition but lacks judgment and self-verification. Your role is to provide the oversight it cannot provide itself.
+Treat AI-generated code as **a draft**. You provide the judgment and verification the agent cannot.
 
 ---
 
 ## 2. Context management issues
 
-Context management is the most common source of agent failures. The agent operates within a limited context window. When this fills up or becomes cluttered, performance degrades significantly.
+Context management is the most common source of agent failures. A full context window leads to forgetting, repetition, and hallucination.
 
 ### 2.1 Context loss and infinite loops
 
 **Problem:** The agent loses track of its progress within a task, repeatedly searching for the same information or applying the same fix.
 
 **Symptoms:**
+
 - Repetitive output like "Let me search for..." followed by the same search
 - Agent re-asks questions you already answered
 - Same code changes applied multiple times
 
+> [!NOTE]
+> Agent file edits save immediately to disk ([Cursor agent security][cursor-security]). Repeat loops are context loss or a failed edit, not a sync delay. Use `git diff` to confirm whether the change landed.
+
 **Solutions:**
 
-| Action | How to do it |
-| ------ | ------------ |
-| Start fresh | Open a new chat session to reset context |
-| Break down tasks | Divide complex work into smaller, focused requests |
-| Monitor token usage | Watch for signs of context saturation |
-| Clear chat history | Use `Settings > Clear All Chats` periodically |
+| Action              | How to do it                                       |
+| ------------------- | -------------------------------------------------- |
+| Start fresh         | Open a new chat session to reset context           |
+| Break down tasks    | Divide complex work into smaller, focused requests |
+| Monitor token usage | Watch for signs of context saturation              |
+| Clear chat history  | Use `Settings > Clear All Chats` periodically      |
 
 > [!TIP]
 > If the agent enters a loop, don't try to fix it within the same session. Start a new chat with a clearer, more focused prompt.
 
 ### 2.2 Hallucination and irrelevant suggestions
 
-**Problem:** The agent generates plausible-looking but incorrect code, referencing non-existent functions, using wrong APIs, or ignoring your actual codebase structure.
+**Problem:** The agent generates plausible but incorrect code: non-existent functions, wrong APIs, or code that ignores your project structure.
 
 **Symptoms:**
+
 - Code references functions or variables that don't exist
 - Suggestions that ignore runtime errors or logs you provided
 - Generic solutions that don't fit your specific framework or architecture
@@ -95,7 +100,7 @@ when the user object is null. Add null checking before accessing user.email."
 
 ### 2.3 Lost in the middle
 
-**Problem:** When context becomes very long, agents tend to focus on information at the beginning and end, "forgetting" details in the middle.
+**Problem:** When context becomes very long, agents focus on information at the beginning and end and lose details in the middle.
 
 **Solutions:**
 
@@ -105,31 +110,9 @@ when the user object is null. Add null checking before accessing user.email."
 
 ---
 
-## 3. File synchronization problems
+## 3. Version control
 
-### 3.1 Unsaved changes causing loops
-
-**Problem:** The agent applies code changes that register in the editor buffer but aren't immediately written to disk. When the agent re-reads the file, it sees the old content and attempts the same edit again.
-
-**Symptoms:**
-- Same edit applied repeatedly
-- Unsaved file indicator (dot) persists after AI edits
-- Agent "fixes" the same issue multiple times
-
-**Solutions:**
-
-| Action | How to do it |
-| ------ | ------------ |
-| Enable autosave | See [Setup fundamentals > Enable autosave][setup-fundamentals] |
-| Manual save | Press `Cmd+S` / `Ctrl+S` after each AI edit |
-| Watch indicators | Check for unsaved dots before allowing agent to continue |
-
-> [!WARNING]
-> If you notice the agent applying the same change repeatedly, **stop immediately**. Save the file manually, then verify the change was applied before continuing.
-
-### 3.2 Version control as safety net
-
-Always commit working code before starting significant AI-assisted changes. This provides instant rollback capability.
+Commit working code before significant AI-assisted changes for instant rollback.
 
 For git undo commands (`git reset`, `git restore`), see [Setup fundamentals > Undo commands][setup-fundamentals].
 
@@ -140,11 +123,12 @@ For git undo commands (`git reset`, `git restore`), see [Setup fundamentals > Un
 
 ## 4. Code quality issues
 
-### 4.1 The "junior developer" pattern
+### 4.1 Subtle bugs and broken conventions
 
-AI agents can behave like inexperienced developers, producing code that works superficially but contains subtle logic errors, missing edge cases, or architectural problems.
+Agent code can compile and pass basic checks while hiding real defects.
 
 **Common issues:**
+
 - Removing essential null checks or error handling
 - Breaking existing functionality while adding new features
 - Ignoring project conventions and patterns
@@ -183,22 +167,20 @@ LLMs cannot self-verify their logic. Compensate by having the agent write tests 
 ```
 
 > [!NOTE]
-> Tests written by AI also need review, but they provide an additional layer of validation and documentation for expected behavior.
+> Tests written by AI need the same review as any other code.
 
 ---
 
 ## 5. Workflow best practices
 
-### 5.1 The orchestrator mindset
+### 5.1 Common workflow mistakes
 
-Shift from "coder who uses AI" to "orchestrator who directs AI":
-
-| Old approach | Orchestrator approach |
-| ------------ | -------------------- |
-| Accept suggestions blindly | Review every change critically |
+| Avoid                           | Do instead                                 |
+| ------------------------------- | ------------------------------------------ |
+| Accept suggestions blindly      | Review every change critically             |
 | Fix AI mistakes in same session | Rollback and re-prompt with better context |
-| One big request | Multiple small, focused requests |
-| Hope it works | Verify with tests and manual review |
+| One big request                 | Multiple small, focused requests           |
+| Hope it works                   | Verify with tests and manual review        |
 
 ### 5.2 Effective prompting strategies
 
@@ -229,12 +211,12 @@ Success criteria:
 
 ### 5.3 When to stop and restart
 
-Recognize when a session has gone off track:
+Signs the session needs a restart:
 
 - Agent is looping or repeating itself
 - Suggestions have become increasingly irrelevant
 - You've corrected the same mistake multiple times
-- Context feels "polluted" with failed attempts
+- Failed attempts have filled the context
 
 **Recovery steps:**
 
@@ -252,21 +234,20 @@ For multi-step or architectural changes, use Plan Mode (`Cmd+P` / `Ctrl+P`) to:
 - Catch misunderstandings early
 
 > [!TIP]
-> Plan Mode is especially valuable when you're unsure about the best approach. Let the agent propose a plan, refine it together, then execute.
+> Plan Mode is useful when you're unsure about the approach. Let the agent propose a plan, refine it together, then execute.
 
 ---
 
 ## 6. Troubleshooting
 
-| Problem | Likely cause | Solution |
-| ------- | ------------ | -------- |
-| Agent repeats same action | Context loss or file sync issue | Start new session, save files manually |
-| Suggestions ignore my code | Insufficient context provided | Use `@file` to reference specific files |
-| Code references non-existent functions | Hallucination | Provide more explicit constraints and examples |
-| Agent removes important code | Unclear about what to preserve | Specify what should NOT change |
-| Performance is slow | Large context or heavy codebase | Reduce context, use `.cursorignore` |
-| Same "fix" applied repeatedly | Unsaved changes | Enable autosave or save manually after each edit |
-| Agent gets stuck on first prompt | Loop bug | Restart Cursor, report to community forum |
+| Problem                                | Likely cause                    | Solution                                         |
+| -------------------------------------- | ------------------------------- | ------------------------------------------------ |
+| Agent repeats same action or fix       | Context loss or failed edit     | Start new session; confirm state with `git diff` |
+| Suggestions ignore my code             | Insufficient context provided   | Use `@file` to reference specific files          |
+| Code references non-existent functions | Hallucination                   | Provide more explicit constraints and examples   |
+| Agent removes important code           | Unclear about what to preserve  | Specify what should NOT change                   |
+| Performance is slow                    | Large context or heavy codebase | Reduce context, use `.cursorignore`              |
+| Agent gets stuck on first prompt       | Loop bug                        | Restart Cursor, report to community forum        |
 
 ---
 
@@ -282,6 +263,7 @@ For Cursor settings, context symbols, and chat modes, see [Setup fundamentals][s
 - [Cursor Forum][cursor-forum]
 
 <!-- Link definitions -->
+
 [setup-fundamentals]: 1-setup-fundamentals.md
 [cursor-docs]: https://cursor.com/docs
 [cursor-rules]: https://cursor.com/docs/rules

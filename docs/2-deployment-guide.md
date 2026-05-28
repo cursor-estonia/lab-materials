@@ -23,18 +23,18 @@ Deployment makes your code accessible on the internet via a URL.
 
 ```mermaid
 flowchart LR
-    subgraph LOCAL["Your Computer"]
-        A[Write Code] --> B[Test Locally]
+    subgraph LOCAL["Your computer"]
+        A[Write code] --> B[Test locally]
     end
 
-    subgraph PLATFORM["Deployment Platform"]
-        C[Push to Git] --> D[Build Process]
-        D --> E[Deploy to Servers]
+    subgraph PLATFORM["Deployment platform"]
+        C[Push to Git] --> D[Build process]
+        D --> E[Deploy to servers]
     end
 
-    subgraph LIVE["The Internet"]
-        E --> F[CDN / Edge Network]
-        F --> G[Users Worldwide]
+    subgraph LIVE["The internet"]
+        E --> F[CDN / edge network]
+        F --> G[Users worldwide]
     end
 
     B --> C
@@ -48,7 +48,7 @@ flowchart LR
 | **CDN**                   | Servers worldwide that serve your site fast           |
 | **Production**            | The live version users see                            |
 | **Preview**               | A test version to check before going live             |
-| **Environment Variables** | Secret configuration values (API keys, database URLs) |
+| **Environment variables** | Secret configuration values (API keys, database URLs) |
 
 ---
 
@@ -89,7 +89,7 @@ You get a URL like: `https://your-project.vercel.app`
 > [!NOTE]
 > Check your deployment visibility in Project Settings > Deployment Protection. Vercel Authentication restricts access to team members only. See [Deployment Protection docs](https://vercel.com/docs/deployment-protection).
 
-Vercel automatically provides a unique preview URL for every branch and pull request, making it easy to test changes before merging.
+Vercel provides a unique preview URL for every branch and pull request.
 
 ### Automatic deployments
 
@@ -152,13 +152,13 @@ DATABASE_URL=postgres://...                   # Server-side only
 
 ## 5. Other platforms
 
-While Vercel is excellent for frontend projects, different platforms serve different needs. Here's a comparison of popular deployment options:
+Other platforms serve different needs:
 
 | Platform    | Best for              | Free tier        | Deploy command            |
 | ----------- | --------------------- | ---------------- | ------------------------- |
 | **Vercel**  | Next.js, React        | 100 GB bandwidth | `vercel --prod`           |
 | **Netlify** | Static sites, forms   | 300 credits/mo   | `netlify deploy --prod`   |
-| **Railway** | Full-stack + database | $5 credit/mo     | `railway deploy`          |
+| **Railway** | Full-stack + database | $5 credit/mo     | `railway up`              |
 | **Render**  | Heroku replacement    | 750 hours/mo     | Git push or `render.yaml` |
 | **Replit**  | Browser-based dev     | 10 GiB egress    | Click "Deploy"            |
 
@@ -175,7 +175,7 @@ While Vercel is excellent for frontend projects, different platforms serve diffe
 
 ## 6. Security basics
 
-Deployed applications are publicly accessible, making security essential. The most common mistake is accidentally exposing API keys, database credentials, or other secrets in your code.
+Deployed applications are publicly accessible. The most common mistake is exposing API keys, database credentials, or other secrets in your code.
 
 > [!WARNING]
 > Never commit secrets or API keys to Git. Once pushed, they are visible in your repository's history even if you delete them later. Always use environment variables.
@@ -253,6 +253,7 @@ node_modules
 | `vercel dev`          | Run local dev server   |
 
 <!-- Link definitions -->
+
 [setup-fundamentals]: 1-setup-fundamentals.md
 [vercel]: https://vercel.com
 [netlify]: https://netlify.com
