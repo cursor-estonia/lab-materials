@@ -14,6 +14,8 @@ Hands-on guides from setup to advanced workflows. Go in order or jump to what yo
   Security vulnerabilities, prompt injection, and hardening practices
 - [5. Subagents and hooks](docs/5-subagents-and-hooks.md)\
   Custom subagents, hooks, and scaling patterns
+- [6. MCP vs skills](docs/6-mcp-vs-skills.md)\
+  MCP vs skills, when to use which and how to configure them
 
 ## Contributing
 

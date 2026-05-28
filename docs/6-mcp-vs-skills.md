@@ -130,7 +130,7 @@ Let's create an example skill for reviewing code style based on some static rule
 
 ## 3. Configure a Git provider MCP in your project
 
-This section combines **general MCP configuration** with concrete setups for **GitLab** (GitLab.com or self-hosted) and **GitHub**. 
+This section combines **general MCP configuration** with concrete setups for **GitLab** (GitLab.com or self-hosted) and **GitHub**.
 
 It's recommended to configure MCPs in the project, as each project may require different MCP servers or you will have unneccessary token wasting or lookups if you don't require it in another project.
 
@@ -175,7 +175,7 @@ Add `.env` to `.gitignore` when you use PAT-based setups loaded from files.
 There are two options for GitLab: official and community. Official is recommended for Gitlab Premium/Ultimate users.
 
 - [Official GitLab MCP (requires Gitlab Premium/Ultimate)](#341-official-gitlab-mcp-recommended)
-- [Community stdio MCP (for Gitlab Community Edition and self-hosted)](#342-community-stdio-mcp-pat-based-alternative)
+- [Community stdio MCP (for Gitlab Community Edition and self-hosted)](#342-community-mcp-server-pat-based-alternative)
 
 #### 3.4.1 Official GitLab MCP (recommended)
 
@@ -208,7 +208,7 @@ Add this to `.cursor/mcp.json`:
 
 For GitLab.com, use `https://gitlab.com/api/v4/mcp`.
 
-**Verify official GitLab MCP is loaded**
+#### Verify official GitLab MCP is loaded
 
 1. Open **Settings > Tools & MCP**.
 2. Confirm `GitLab` appears and is connected.
@@ -259,7 +259,7 @@ What the fields mean:
 | `env` | Environment variables for the server (we're using envFile for this) |
 | `envFile` | Load secrets from a file (recommended for tokens) |
 
-**Verify community GitLab MCP is loaded**
+#### Verify community GitLab MCP is loaded
 
 1. Open **Settings > Tools & MCP**.
 2. Confirm `gitlab` appears and is connected.
@@ -273,7 +273,7 @@ What the fields mean:
 
 ### 3.6 GitHub MCP
 
-**Prerequisites**
+#### Prerequisites
 
 - Cursor v0.48.0+ (Streamable HTTP support)
 - [GitHub Personal Access Token](https://github.com/settings/tokens) with minimum scopes needed (`repo`, and `read:org` if required)
@@ -381,4 +381,3 @@ Also try to make a skill for using the git provider's CLI tools like `gh` or `gl
 [gitlab-mcp-docs]: https://docs.gitlab.com/user/gitlab_duo/model_context_protocol/mcp_server/
 [zereight-gitlab-mcp]: https://github.com/zereight/gitlab-mcp
 [mcp-servers]: https://github.com/modelcontextprotocol/servers
-[taltech-clean-code]: https://javadoc.pages.taltech.ee/code_style/clean-code.html
