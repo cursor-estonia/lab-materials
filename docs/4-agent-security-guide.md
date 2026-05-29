@@ -10,7 +10,8 @@
 - [4. Prompt injection attacks](#4-prompt-injection-attacks)
 - [5. Configuration security](#5-configuration-security)
 - [6. Security checklist](#6-security-checklist)
-- [7. Reference](#7-reference)
+- [7. Troubleshooting](#7-troubleshooting)
+- [8. Reference](#8-reference)
 
 <!-- tocstop -->
 
@@ -360,7 +361,18 @@ Use this checklist before working on sensitive projects:
 - [ ] Inspect any `.cursor` or `.vscode` configuration
 - [ ] Consider opening in restricted/sandbox mode first
 
-## 7. Reference
+## 7. Troubleshooting
+
+| Problem                                           | Likely cause                                    | Solution                                                                              |
+| ------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Agent reads a file you wanted to exclude          | `.cursorignore` added after the file was opened | Add the entry first, then start a new chat; existing context may still hold contents  |
+| Secrets appear in generated code                  | Agent defaulted to hardcoded values             | Re-prompt to use `process.env`; review diffs for keys, passwords, and inline PEM      |
+| Agent runs commands without asking                | Auto-run mode too permissive                    | Set **Allowlist** (empty allowlist) per [Setup fundamentals][setup-fundamentals]      |
+| `.env` still tracked by git                       | File committed before being ignored             | Add to `.gitignore`, then `git rm --cached .env`; rotate any exposed secrets          |
+| Agent follows instructions hidden in code or docs | Prompt injection from untrusted content         | Review unfamiliar repos in a plain editor first; restrict auto-run and check commands |
+| Client-side secret exposed in browser             | Secret prefixed with `NEXT_PUBLIC_`             | Remove the prefix; keep sensitive values server-side only                             |
+
+## 8. Reference
 
 ### Configuration files
 

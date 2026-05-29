@@ -8,7 +8,8 @@
 - [2. Subagents](#2-subagents)
 - [3. Hooks](#3-hooks)
 - [4. Scaling patterns](#4-scaling-patterns)
-- [5. Reference](#5-reference)
+- [5. Troubleshooting](#5-troubleshooting)
+- [6. Reference](#6-reference)
 
 <!-- tocstop -->
 
@@ -328,7 +329,19 @@ The parent agent coordinates while subagents do the work in isolated contexts.
 > Without git worktrees, parallel agents share the same working directory, so a `git reset` from one can undo another's changes. Worktrees give each agent its own branch and directory (select from the agent dropdown); you merge the results afterward.
 > Worktrees do not isolate the environment. For that (separate filesystem, processes, and network), run each agent in its own container or VM (for example, a dev container, or a remote machine over SSH).
 
-## 5. Reference
+## 5. Troubleshooting
+
+| Problem                              | Likely cause                            | Solution                                                                              |
+| ------------------------------------ | --------------------------------------- | ------------------------------------------------------------------------------------- |
+| Subagent not available in `/` menu   | Wrong path or filename                  | Place the file in `.cursor/agents/` (project) or `~/.cursor/agents/` (global)         |
+| Agent never delegates to a subagent  | Vague `description` frontmatter         | Describe clearly when to use it, or invoke explicitly with `/<name>`                  |
+| Hook never runs                      | `hooks.json` not found or invalid JSON  | Confirm it is in `.cursor/`, validate JSON, and match the correct event name          |
+| Hook script does not execute         | Script not executable                   | Run `chmod +x .cursor/hooks/<script>` and verify the command path in `hooks.json`     |
+| Command not blocked by a hook        | Hook exited with non-zero, non-`2` code | Exit with code `2` or output `{"permission": "deny"}`; check the `matcher` regex      |
+| Task loop never stops                | `loop_count` not checked against a cap  | Enforce `MAX_ITERATIONS` in the script and set `loop_limit` on the `stop` hook        |
+| Parallel agents overwrite each other | Subagents share one working directory   | Use git worktrees so each agent gets its own branch and directory, then merge results |
+
+## 6. Reference
 
 ### Documentation
 
