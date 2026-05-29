@@ -365,7 +365,7 @@ Use this checklist before working on sensitive projects:
 
 | Problem                                           | Likely cause                                    | Solution                                                                              |
 | ------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Agent reads a file you wanted to exclude          | `.cursorignore` added after the file was opened | Add the entry first, then start a new chat; existing context may still hold contents  |
+| Agent reads a file you want to exclude            | `.cursorignore` added after the file was opened | Add the entry first, then start a new chat; existing context may still hold contents  |
 | Secrets appear in generated code                  | Agent defaulted to hardcoded values             | Re-prompt to use `process.env`; review diffs for keys, passwords, and inline PEM      |
 | Agent runs commands without asking                | Auto-run mode too permissive                    | Set **Allowlist** (empty allowlist) per [Setup fundamentals][setup-fundamentals]      |
 | `.env` still tracked by git                       | File committed before being ignored             | Add to `.gitignore`, then `git rm --cached .env`; rotate any exposed secrets          |
